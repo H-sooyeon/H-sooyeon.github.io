@@ -758,6 +758,98 @@
         }
       }
 
+      /* ── Peer Feedback Quote ── */
+      .peer-feedback {
+        margin-top: 28px;
+        background: var(--clr-accent-light);
+        border-left: 3px solid var(--clr-accent);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .peer-feedback .quote-icon {
+        font-size: 22px;
+        line-height: 1;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .peer-feedback .quote-text {
+        font-size: 13.5px;
+        color: #3730a3;
+        line-height: 1.7;
+        font-style: italic;
+      }
+      .peer-feedback .quote-source {
+        font-size: 12px;
+        color: var(--clr-accent);
+        font-style: normal;
+        font-weight: 600;
+        margin-top: 6px;
+      }
+
+      /* ── Inline Code & PR Badge ── */
+      .ic {
+        display: inline;
+        font-size: 11.5px;
+        font-family: "Menlo", "Consolas", monospace;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: #374151;
+        line-height: 1;
+        vertical-align: middle;
+      }
+      a.pr-badge {
+        display: inline;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 20px;
+        background: var(--clr-accent-light);
+        color: var(--clr-accent);
+        border: 1px solid #c7d2fe;
+        text-decoration: none;
+        vertical-align: middle;
+        transition: background 0.15s;
+      }
+      a.pr-badge:hover {
+        background: var(--clr-accent);
+        color: #fff;
+        border-color: var(--clr-accent);
+      }
+      .header-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      /* ── Detail Sub-divider ── */
+      .detail-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 4px 0;
+      }
+      .detail-divider span {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--clr-sub);
+        white-space: nowrap;
+      }
+      .detail-divider::before,
+      .detail-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--clr-border);
+      }
+
       /* ── Contact / Footer ── */
       #contact {
         padding: 64px 0;
@@ -938,6 +1030,15 @@
             <div class="hero-links">
               <a class="hero-link primary" href="#project">프로젝트 보기</a>
               <a class="hero-link secondary" href="https://github.com/H-sooyeon" target="_blank">GitHub →</a>
+            </div>
+            <div class="peer-feedback">
+              <div class="quote-icon">💬</div>
+              <div>
+                <div class="quote-text">
+                  확실한 근거로 소통하며 프로젝트에 책임을 다하고, 긍정적인 에너지로 팀의 몰입을 돕는다.
+                </div>
+                <div class="quote-source">— 부스트캠프 피어캠프 동료 피드백</div>
+              </div>
             </div>
           </div>
           <div class="hero-photo">
@@ -1159,10 +1260,72 @@
         <div class="tab-panel active">
           <div class="detail-card">
             <div class="detail-card-header">
-              <h3>인증 구조 개선과 사용자 경험 향상</h3>
-              <p>Sliding Session 도입으로 세션 만료 문제 해결</p>
+              <h3>Next-auth 통합 인증 설계 → Sliding Session 도입</h3>
+              <p>환경 간 데이터 단절 해결 · 동시성 제어 · 세션 만료 UX 개선</p>
             </div>
             <div class="detail-sections">
+              <!-- ── Part 1: Next-auth 통합 인증 ── -->
+              <div class="detail-divider"><span>Part 1 · Next-auth 통합 인증 설계</span></div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>클라이언트 메모리 기반 Access Token 관리 → 서버 컴포넌트에서 토큰 접근 불가</li>
+                  <li>SSR 시 인증 데이터 패칭이 불가능한 결함 발견</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결</div>
+                <ul>
+                  <li>
+                    <span>
+                      Next-auth v5 도입 — 세션 정보를 암호화된 쿠키로 관리해 서버·클라이언트 어디서든 최신 세션 접근
+                      가능한 통합 인증 인터페이스 구축
+                      <a
+                        class="pr-badge"
+                        href="https://github.com/boostcampwm2025/web25-ittda/pull/138"
+                        target="_blank"
+                      >
+                        PR #138
+                      </a>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      서버 컴포넌트 병렬 요청 시 발생하는 RTR(Refresh Token Rotation)
+                      <code class="ic">reuse detected</code>
+                      에러 → JWT 콜백 기반 갱신 로직 일원화 및 백엔드 Grace Period 도입 제안·적용
+                      <a
+                        class="pr-badge"
+                        href="https://github.com/boostcampwm2025/web25-ittda/pull/145"
+                        target="_blank"
+                      >
+                        PR #145
+                      </a>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      런타임 환경에 무관하게 최신 인증 헤더를 자동 주입하는 단일
+                      <code class="ic">fetchApi</code>
+                      유틸 구축 → 코드 응집도 향상 및 보안 강화
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>서버·클라이언트 컴포넌트 간 인증 상태 동기화 — 데이터 단절 문제 해결</li>
+                  <li>병렬 요청 환경에서의 동시성 문제 제어</li>
+                </ul>
+              </div>
+
+              <!-- ── Part 2: Sliding Session ── -->
+              <div class="detail-divider"><span>Part 2 · Sliding Session 도입</span></div>
+
               <div class="detail-block">
                 <div class="detail-block-title">문제</div>
                 <ul>
@@ -1199,6 +1362,13 @@
                 <div class="result-highlight">
                   서비스 특성상 "기록 작성 중 끊김"은 치명적인 UX 문제이므로, 보안 복잡도 증가보다 UX 저하 리스크가 더
                   크다고 판단했습니다.
+                  <a
+                    class="pr-badge"
+                    href="https://github.com/boostcampwm2025/web25-ittda/discussions/272"
+                    target="_blank"
+                  >
+                    Discussions #272
+                  </a>
                 </div>
               </div>
 
@@ -1256,6 +1426,18 @@
             <div class="detail-card-header">
               <h3>이미지 로딩 구조 개선과 보안 강화</h3>
               <p>Proxy API + 캐싱 전략 도입 및 코드 리뷰를 통한 보안 개선</p>
+              <div class="header-badges">
+                <a
+                  class="pr-badge"
+                  href="https://velog.io/@dobby_/nextjs-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A1%9C%EB%93%9C-%EC%B5%9C%EC%A0%81%ED%99%94"
+                  target="_blank"
+                >
+                  📝 블로그
+                </a>
+                <a class="pr-badge" href="https://github.com/boostcampwm2025/web25-ittda/pull/264" target="_blank">
+                  PR #264
+                </a>
+              </div>
             </div>
             <div class="detail-sections">
               <div class="detail-block">
@@ -1566,6 +1748,15 @@
             <div class="detail-card-header">
               <h3>상태 생명주기를 고려한 구조 개선</h3>
               <p>Zustand에서 Context API로 전환하여 페이지 단위 상태 격리</p>
+              <div class="header-badges">
+                <a
+                  class="pr-badge"
+                  href="https://github.com/boostcampwm2025/web25-ittda/wiki/%ED%94%84%EB%A1%9C%ED%95%84-%EC%88%98%EC%A0%95%EC%97%90%EC%84%9C%EC%9D%98-%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC-Context-API-vs-Zustand"
+                  target="_blank"
+                >
+                  📝 ADR
+                </a>
+              </div>
             </div>
             <div class="detail-sections">
               <div class="detail-block">
