@@ -758,6 +758,15 @@
         }
       }
 
+      /* ── Print Cover & TOC (screen에서 숨김) ── */
+      #print-cover,
+      #print-toc {
+        display: none;
+      }
+
+      /* ── Contact / Footer ── */
+      /* (이 주석은 아래 실제 contact 섹션 위에 있음) */
+
       /* ── Peer Feedback Quote ── */
       .peer-feedback {
         margin-top: 28px;
@@ -943,55 +952,435 @@
       /* ── Print Styles ── */
       @media print {
         @page {
-          size: A4;
-          margin: 20mm 18mm;
+          size: A4 landscape;
+          margin: 12mm 16mm;
         }
+
+        /* 숨김 */
         nav,
         .btn-print,
         .hero-links,
-        .tabs-nav {
+        .tabs-nav,
+        .media-block,
+        .peer-feedback {
           display: none !important;
         }
-        body {
-          font-size: 12px;
-          background: #fff;
+
+        /* ── 표지 ── */
+        #print-cover {
+          display: flex;
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          page-break-after: always;
+          break-after: page;
+          overflow: hidden;
+          align-items: stretch;
         }
+        .cover-bg {
+          display: none;
+        }
+        .cover-body {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          padding: 0 48px;
+          position: relative;
+          z-index: 1;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .cover-left {
+          width: 100%;
+        }
+        .cover-label {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: #4f46e5;
+          margin-bottom: 14px;
+        }
+        .cover-name {
+          font-size: 52px;
+          font-weight: 900;
+          color: #111827;
+          letter-spacing: -1.5px;
+          margin-bottom: 14px;
+          line-height: 1.1;
+        }
+        .cover-tagline {
+          font-size: 15px;
+          color: #374151;
+          font-weight: 500;
+          line-height: 1.7;
+          margin-bottom: 20px;
+        }
+        .cover-meta {
+          font-size: 12px;
+          color: #6b7280;
+          font-weight: 500;
+        }
+        .cover-right {
+          display: none;
+        }
+
+        /* ── 목차 ── */
+        #print-toc {
+          display: block;
+          padding: 32px 36px;
+          page-break-after: always;
+          break-after: page;
+        }
+        .toc-label {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: #4f46e5;
+          margin-bottom: 6px;
+        }
+        .toc-title {
+          font-size: 22px;
+          font-weight: 800;
+          color: #111;
+          margin-bottom: 24px;
+          letter-spacing: -0.4px;
+        }
+        .toc-list {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+        .toc-item {
+          display: flex;
+          align-items: baseline;
+          gap: 14px;
+          padding: 10px 0;
+          border-bottom: 1px solid #e5e7eb;
+        }
+        .toc-item.toc-parent {
+          padding-bottom: 6px;
+          border-bottom: none;
+        }
+        .toc-num {
+          font-size: 12px;
+          font-weight: 800;
+          color: #4f46e5;
+          min-width: 24px;
+        }
+        .toc-text {
+          font-size: 13px;
+          font-weight: 600;
+          color: #111;
+        }
+        .toc-sub {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 5px 0 5px 38px;
+          font-size: 11.5px;
+          color: #4b5563;
+          border-bottom: 1px dashed #e5e7eb;
+        }
+        .toc-sub:last-child {
+          border-bottom: none;
+        }
+        .toc-sub-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #4f46e5;
+          flex-shrink: 0;
+        }
+
+        /* hero 섹션은 인쇄 시 숨김 (표지가 대체) */
+        #hero {
+          display: none !important;
+        }
+
+        body {
+          font-size: 10.5px;
+          background: #fff;
+          color: #111;
+        }
+
+        /* 섹션 여백 — landscape는 높이가 짧으므로 압축 */
         section {
-          padding: 24px 0;
+          padding: 14px 0;
+        }
+        section + section {
+          border-top: 1px solid #ddd;
         }
         .container {
           padding: 0;
+          max-width: 100%;
         }
+
+        /* 카드 그림자 제거 */
         .project-card,
         .detail-card,
         .about-card {
           box-shadow: none;
           border: 1px solid #ddd;
         }
+
+        /* 탭 패널 전체 표시 */
         .tab-panel {
           display: block !important;
         }
-        .tab-panel + .tab-panel {
-          margin-top: 20px;
+
+        /* 섹션 단위 페이지 구분 */
+        #about {
           page-break-before: always;
         }
-        .hero-name {
-          font-size: 26px;
+        #project {
+          page-break-before: always;
+        }
+        #details {
+          page-break-before: always;
+        }
+        #contact {
+          display: none;
+        }
+        footer {
+          display: none;
+        }
+
+        /* 탭 패널 사이 페이지 구분 */
+        .tab-panel + .tab-panel {
+          margin-top: 0;
+          page-break-before: always;
+        }
+
+        /* landscape에서 about 2열 유지 */
+        .about-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+
+        /* 잘림 방지: 카드/블록 단위 (구형 + 모던 문법 병행) */
+        .project-card,
+        .detail-block,
+        .compare-item,
+        .learn-box,
+        .result-highlight,
+        .edu-item,
+        .skill-group,
+        .skill-item {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+        /* about-card / detail-card는 길어서 avoid 강제 안 함 — edu-item 단위로 제어 */
+        .about-card {
+          page-break-inside: auto;
+          break-inside: auto;
+        }
+        .detail-card {
+          page-break-inside: auto;
+          break-inside: auto;
+        }
+
+        /* detail-divider(Part 1/2 구분선) 앞에서 반드시 새 페이지 */
+        .detail-divider {
+          page-break-before: always;
+          break-before: page;
+          page-break-after: avoid;
+          break-after: avoid;
+        }
+        /* 첫 번째 divider는 카드 헤더 바로 다음이므로 페이지 끊지 않음 */
+        .detail-sections > .detail-divider:first-child {
+          page-break-before: avoid;
+          break-before: avoid;
+        }
+
+        .detail-block-title {
+          page-break-after: avoid;
+          break-after: avoid;
+        }
+        .section-label {
+          page-break-after: avoid;
+          break-after: avoid;
         }
         .section-title {
-          font-size: 18px;
+          page-break-after: avoid;
+          break-after: avoid;
+        }
+
+        /* compare-grid 3열 유지 (landscape 폭 충분) */
+        .compare-grid {
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 8px;
+        }
+
+        /* 글자 크기 조정 */
+        .hero-name {
+          font-size: 22px;
+        }
+        .hero-title {
+          font-size: 12px;
+        }
+        .hero-desc {
+          font-size: 10.5px;
+          line-height: 1.6;
+        }
+        .section-label {
+          font-size: 9px;
+        }
+        .section-title {
+          font-size: 15px;
+          margin-bottom: 16px;
+        }
+        .detail-card-header h3 {
+          font-size: 13px;
+        }
+        .detail-card-header p {
+          font-size: 10px;
+        }
+        .detail-sections {
+          padding: 16px 20px;
+          gap: 12px;
+        }
+        .detail-block-title {
+          font-size: 10px;
+          margin-bottom: 6px;
+        }
+        .detail-block li {
+          font-size: 10.5px;
         }
         .compare-grid {
-          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
         }
+        .compare-item {
+          padding: 10px;
+          font-size: 10px;
+        }
+        .learn-box {
+          font-size: 10.5px;
+          padding: 10px 12px;
+        }
+        .result-highlight {
+          font-size: 10.5px;
+          padding: 8px 12px;
+        }
+        .project-card {
+          padding: 20px;
+        }
+        .about-card {
+          padding: 16px;
+        }
+        .edu-item {
+          padding: 12px 0;
+        }
+        .edu-item .school {
+          font-size: 11px;
+        }
+        .edu-item .degree {
+          font-size: 10px;
+        }
+        .edu-activities li {
+          font-size: 10px;
+        }
+        .edu-paper {
+          font-size: 9.5px;
+        }
+        .skill-item {
+          font-size: 10px;
+        }
+        .skill-name {
+          font-size: 10px;
+        }
+        .skill-desc {
+          font-size: 10px;
+        }
+        .project-name {
+          font-size: 16px;
+        }
+        .project-tagline {
+          font-size: 11px;
+        }
+        .meta-item {
+          font-size: 10.5px;
+        }
+        .hero-photo {
+          width: 100px;
+          height: 100px;
+        }
+
+        /* 링크 색상 유지, 밑줄 제거 */
         a {
-          color: inherit;
-          text-decoration: none;
+          color: inherit !important;
+          text-decoration: none !important;
+        }
+        a.pr-badge {
+          border: 1px solid #ddd;
+          background: #f5f5f5;
+          color: #444 !important;
         }
       }
     </style>
   </head>
   <body>
+    <!-- ── Print Only: Cover & TOC ── -->
+    <div id="print-cover">
+      <div class="cover-bg"></div>
+      <div class="cover-body">
+        <div class="cover-left">
+          <p class="cover-label">Frontend Developer Portfolio</p>
+          <h1 class="cover-name">황수연</h1>
+          <p class="cover-tagline">회고를 통해 성장하는 프론트엔드 개발자</p>
+          <div class="cover-meta">
+            <span>github.com/H-sooyeon</span>
+          </div>
+        </div>
+        <div class="cover-right"></div>
+      </div>
+    </div>
+
+    <div id="print-toc">
+      <p class="toc-label">Contents</p>
+      <h2 class="toc-title">목차</h2>
+      <ol class="toc-list">
+        <li class="toc-item">
+          <span class="toc-num">01</span>
+          <span class="toc-text">자기소개</span>
+        </li>
+        <li class="toc-item">
+          <span class="toc-num">02</span>
+          <span class="toc-text">학력 &amp; 기술 스택</span>
+        </li>
+        <li class="toc-item">
+          <span class="toc-num">03</span>
+          <span class="toc-text">프로젝트 소개 — 잇다 (Ittda)</span>
+        </li>
+        <li class="toc-item toc-parent">
+          <span class="toc-num">04</span>
+          <span class="toc-text">기술적 의사결정</span>
+        </li>
+        <li class="toc-sub">
+          <span class="toc-sub-dot"></span>
+          Next-auth 통합 인증 설계 &amp; Sliding Session 도입
+        </li>
+        <li class="toc-sub">
+          <span class="toc-sub-dot"></span>
+          이미지 로딩 구조 개선 &amp; 보안 강화
+        </li>
+        <li class="toc-sub">
+          <span class="toc-sub-dot"></span>
+          PWA 한계 개선 &amp; Capacitor 모바일 앱 확장
+        </li>
+        <li class="toc-sub">
+          <span class="toc-sub-dot"></span>
+          디자인 생산성 개선을 위한 도구 선택
+        </li>
+        <li class="toc-sub">
+          <span class="toc-sub-dot"></span>
+          상태 생명주기를 고려한 구조 개선
+        </li>
+      </ol>
+    </div>
+
     <!-- Navigation -->
     <nav>
       <div class="nav-inner">
@@ -1561,24 +1950,53 @@
               <p>브라우저 제약 극복 → 하이브리드 앱 전환</p>
             </div>
             <div class="detail-sections">
-
               <!-- ── Part 1: PWA 한계 개선 ── -->
               <div class="detail-divider"><span>Part 1 · PWA 구축 및 한계 개선</span></div>
 
               <div class="detail-block">
                 <div class="detail-block-title">문제</div>
                 <ul>
-                  <li><span>빌드 타임에 생성되는 <code class="ic">manifest.json</code>만으로는 다크/라이트 테마 전환 시 시스템 UI(주소창) 색상 실시간 동기화 불가</span></li>
-                  <li>브라우저별로 상이한 PWA 설치 프로세스로 인한 사용자 혼란 예측 <a class="pr-badge" href="#" target="_blank">ADR</a></li>
+                  <li>
+                    <span>
+                      빌드 타임에 생성되는
+                      <code class="ic">manifest.json</code>
+                      만으로는 다크/라이트 테마 전환 시 시스템 UI(주소창) 색상 실시간 동기화 불가
+                    </span>
+                  </li>
+                  <li>
+                    브라우저별로 상이한 PWA 설치 프로세스로 인한 사용자 혼란 예측
+                    <a class="pr-badge" href="#" target="_blank">ADR</a>
+                  </li>
                 </ul>
               </div>
 
               <div class="detail-block">
                 <div class="detail-block-title">해결</div>
                 <ul>
-                  <li><span><strong>테마 깜빡임 방지</strong> — JS 로드 전 HTML 헤더 단계에서 <code class="ic">localStorage</code>를 확인해 메타 태그를 즉시 수정하는 인라인 스크립트 삽입 → 앱 실행 시 테마 색상이 뒤늦게 적용되는 시각적 노이즈 제거</span></li>
-                  <li><span><strong>사용자 주도 설치 유도</strong> — <code class="ic">beforeinstallprompt</code> 이벤트를 캡처해 서비스 내 설치 배너 구현, 해당 이벤트를 미지원하는 브라우저(Safari, Vivaldi 등)를 위한 커스텀 안내 모달 별도 제작</span></li>
-                  <li><span><code class="ic">display-mode: standalone</code> 감지로 중복 배너 노출 제어 → 네이티브 앱에 가까운 사용 경험 제공</span></li>
+                  <li>
+                    <span>
+                      <strong>테마 깜빡임 방지</strong>
+                      — JS 로드 전 HTML 헤더 단계에서
+                      <code class="ic">localStorage</code>
+                      를 확인해 메타 태그를 즉시 수정하는 인라인 스크립트 삽입 → 앱 실행 시 테마 색상이 뒤늦게 적용되는
+                      시각적 노이즈 제거
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      <strong>사용자 주도 설치 유도</strong>
+                      —
+                      <code class="ic">beforeinstallprompt</code>
+                      이벤트를 캡처해 서비스 내 설치 배너 구현, 해당 이벤트를 미지원하는 브라우저(Safari, Vivaldi 등)를
+                      위한 커스텀 안내 모달 별도 제작
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      <code class="ic">display-mode: standalone</code>
+                      감지로 중복 배너 노출 제어 → 네이티브 앱에 가까운 사용 경험 제공
+                    </span>
+                  </li>
                 </ul>
               </div>
 
