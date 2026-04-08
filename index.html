@@ -1,4 +1,1646 @@
----
-layout: home
-author_profile: true
----
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>황수연 | Frontend Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Reset & Base ── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --clr-bg: #f9fafb;
+        --clr-surface: #ffffff;
+        --clr-border: #e5e7eb;
+        --clr-text: #111827;
+        --clr-sub: #6b7280;
+        --clr-accent: #4f46e5;
+        --clr-accent-light: #eef2ff;
+        --clr-tag-bg: #f3f4f6;
+        --radius: 12px;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.06);
+        --max-w: 900px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Noto Sans KR", "Inter", sans-serif;
+        background: var(--clr-bg);
+        color: var(--clr-text);
+        font-size: 15px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Nav ── */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(249, 250, 251, 0.92);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--clr-border);
+        padding: 0 24px;
+      }
+      .nav-inner {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+      }
+      .nav-logo {
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--clr-accent);
+        text-decoration: none;
+        letter-spacing: -0.3px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 28px;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--clr-sub);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--clr-accent);
+      }
+      .btn-print {
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1px solid var(--clr-border);
+        background: var(--clr-surface);
+        color: var(--clr-sub);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-print:hover {
+        background: var(--clr-accent);
+        color: #fff;
+        border-color: var(--clr-accent);
+      }
+
+      /* ── Layout ── */
+      .container {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      section {
+        padding: 72px 0;
+      }
+      section + section {
+        border-top: 1px solid var(--clr-border);
+      }
+
+      /* ── Section Header ── */
+      .section-label {
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--clr-accent);
+        margin-bottom: 8px;
+      }
+      .section-title {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.4px;
+        margin-bottom: 40px;
+        color: var(--clr-text);
+      }
+
+      /* ── Hero ── */
+      #hero {
+        padding: 80px 0 64px;
+        border-top: none;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 200px;
+        gap: 48px;
+        align-items: center;
+      }
+      .hero-name {
+        font-size: 38px;
+        font-weight: 700;
+        letter-spacing: -0.8px;
+        line-height: 1.25;
+        margin-bottom: 12px;
+      }
+      .hero-name span {
+        color: var(--clr-accent);
+      }
+      .hero-title {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--clr-sub);
+        margin-bottom: 24px;
+      }
+      .hero-desc {
+        font-size: 14.5px;
+        color: #374151;
+        line-height: 1.85;
+        max-width: 580px;
+      }
+      .hero-desc p {
+        margin-bottom: 12px;
+      }
+      .hero-desc p:last-child {
+        margin-bottom: 0;
+      }
+      .hero-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: var(--clr-accent-light);
+        border: 3px solid var(--clr-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--clr-sub);
+        font-size: 13px;
+        font-weight: 500;
+        text-align: center;
+        line-height: 1.5;
+        overflow: hidden;
+        flex-shrink: 0;
+        justify-self: center;
+      }
+      .hero-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .hero-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+      .hero-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .hero-link.primary {
+        background: var(--clr-accent);
+        color: #fff;
+      }
+      .hero-link.secondary {
+        background: var(--clr-surface);
+        color: var(--clr-text);
+        border: 1px solid var(--clr-border);
+      }
+      .hero-link:hover {
+        opacity: 0.85;
+        transform: translateY(-1px);
+      }
+
+      /* ── About / Skills ── */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+      .about-card {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+      .about-card h3 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--clr-text);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .about-card h3 .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--clr-accent);
+      }
+      .edu-item {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--clr-border);
+      }
+      .edu-item:last-child {
+        border-bottom: none;
+      }
+      .edu-item .edu-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 3px;
+      }
+      .edu-item .school {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--clr-text);
+      }
+      .edu-item .period {
+        font-size: 11.5px;
+        color: var(--clr-sub);
+        white-space: nowrap;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+      .edu-item .degree {
+        font-size: 13px;
+        color: var(--clr-sub);
+        margin-bottom: 8px;
+      }
+      .edu-item .edu-activities {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .edu-item .edu-activities li {
+        font-size: 12.5px;
+        color: #4b5563;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.55;
+      }
+      .edu-item .edu-activities li::before {
+        content: "·";
+        color: var(--clr-accent);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .edu-badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--clr-accent-light);
+        color: var(--clr-accent);
+        margin-top: 4px;
+      }
+      .edu-badge.award {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .edu-paper {
+        font-size: 12px;
+        color: #374151;
+        background: var(--clr-bg);
+        border-left: 2px solid var(--clr-accent);
+        padding: 6px 10px;
+        border-radius: 0 6px 6px 0;
+        margin-top: 6px;
+        font-style: italic;
+        line-height: 1.5;
+      }
+      .skill-group {
+        margin-bottom: 18px;
+      }
+      .skill-group:last-child {
+        margin-bottom: 0;
+      }
+      .skill-group-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--clr-sub);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--clr-border);
+      }
+      .skill-item {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 8px 12px;
+        align-items: baseline;
+        margin-bottom: 8px;
+      }
+      .skill-item:last-child {
+        margin-bottom: 0;
+      }
+      .skill-name {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--clr-accent);
+        white-space: nowrap;
+      }
+      .skill-desc {
+        font-size: 12.5px;
+        color: #374151;
+        line-height: 1.6;
+      }
+      /* keep tags for project overview card */
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tag {
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: var(--clr-tag-bg);
+        color: #374151;
+        border: 1px solid var(--clr-border);
+      }
+      .tag.accent {
+        background: var(--clr-accent-light);
+        color: var(--clr-accent);
+        border-color: #c7d2fe;
+      }
+
+      /* ── Project Overview ── */
+      .project-card {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 36px;
+        box-shadow: var(--shadow);
+      }
+      .project-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .project-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: var(--clr-accent-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      .project-name {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.4px;
+        margin-bottom: 4px;
+      }
+      .project-tagline {
+        font-size: 14px;
+        color: var(--clr-sub);
+      }
+      .project-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        background: var(--clr-bg);
+        border-radius: 10px;
+        margin-bottom: 24px;
+      }
+      .meta-item {
+        font-size: 13.5px;
+      }
+      .meta-item strong {
+        font-weight: 600;
+        color: var(--clr-sub);
+        font-size: 11px;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 3px;
+      }
+      .project-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+      .project-screenshot {
+        background: var(--clr-bg);
+        border: 1px dashed var(--clr-border);
+        border-radius: 10px;
+        height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--clr-sub);
+        font-size: 13px;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .project-screenshot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      .contributions h4 {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--clr-sub);
+        margin-bottom: 12px;
+      }
+      .contributions ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .contributions li {
+        font-size: 13.5px;
+        color: #374151;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .contributions li::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--clr-accent);
+        margin-top: 7px;
+        flex-shrink: 0;
+      }
+
+      /* ── Detail Tabs ── */
+      .tabs-nav {
+        display: flex;
+        gap: 0;
+        margin-bottom: 28px;
+        border: 1px solid var(--clr-border);
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--clr-surface);
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 12px 8px;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: inherit;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        color: var(--clr-sub);
+        transition: all 0.2s;
+        border-right: 1px solid var(--clr-border);
+        line-height: 1.4;
+      }
+      .tab-btn:last-child {
+        border-right: none;
+      }
+      .tab-btn:hover {
+        background: var(--clr-bg);
+        color: var(--clr-text);
+      }
+      .tab-btn.active {
+        background: var(--clr-accent);
+        color: #fff;
+      }
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      /* ── Detail Card ── */
+      .detail-card {
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .detail-card-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--clr-border);
+        background: var(--clr-bg);
+      }
+      .detail-card-header h3 {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        margin-bottom: 4px;
+      }
+      .detail-card-header p {
+        font-size: 13.5px;
+        color: var(--clr-sub);
+      }
+      .detail-sections {
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .detail-block {
+      }
+      .detail-block-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--clr-accent);
+        margin-bottom: 10px;
+      }
+      .detail-block ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .detail-block li {
+        font-size: 14px;
+        color: #374151;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        line-height: 1.6;
+      }
+      .detail-block li::before {
+        content: "–";
+        color: var(--clr-accent);
+        flex-shrink: 0;
+        margin-top: 0;
+        font-weight: 600;
+      }
+      .compare-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .compare-item {
+        border: 1px solid var(--clr-border);
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 13px;
+        background: var(--clr-bg);
+        position: relative;
+      }
+      .compare-item.chosen {
+        border-color: var(--clr-accent);
+        background: var(--clr-accent-light);
+      }
+      .compare-item .chosen-badge {
+        position: absolute;
+        top: -9px;
+        left: 12px;
+        background: var(--clr-accent);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+      }
+      .compare-item h5 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--clr-text);
+      }
+      .compare-pros,
+      .compare-cons {
+        font-size: 12.5px;
+        color: var(--clr-sub);
+        margin-bottom: 4px;
+        line-height: 1.5;
+      }
+      .compare-pros::before {
+        content: "+ ";
+        color: #10b981;
+        font-weight: 700;
+      }
+      .compare-cons::before {
+        content: "− ";
+        color: #ef4444;
+        font-weight: 700;
+      }
+      .result-highlight {
+        background: var(--clr-accent-light);
+        border-left: 3px solid var(--clr-accent);
+        border-radius: 0 8px 8px 0;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: #3730a3;
+        font-weight: 500;
+      }
+      .learn-box {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 13.5px;
+        color: #92400e;
+        line-height: 1.7;
+      }
+      .placeholder-note {
+        background: var(--clr-bg);
+        border: 2px dashed var(--clr-border);
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        color: var(--clr-sub);
+        font-size: 14px;
+      }
+
+      /* ── Media Slot ── */
+      .media-block-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--clr-accent);
+        margin-bottom: 10px;
+      }
+      .media-grid {
+        display: grid;
+        gap: 12px;
+      }
+      .media-grid.col-1 {
+        grid-template-columns: 1fr;
+      }
+      .media-grid.col-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .media-item {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--clr-bg);
+        border: 1px solid var(--clr-border);
+      }
+      .media-item img,
+      .media-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .media-item video {
+        max-height: 360px;
+        object-fit: contain;
+        background: #000;
+      }
+      .media-placeholder {
+        aspect-ratio: 16 / 9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--clr-sub);
+        font-size: 13px;
+        border: 2px dashed var(--clr-border);
+        border-radius: 10px;
+        background: var(--clr-bg);
+        cursor: default;
+      }
+      .media-placeholder .icon {
+        font-size: 28px;
+      }
+      .media-caption {
+        font-size: 12px;
+        color: var(--clr-sub);
+        text-align: center;
+        margin-top: 6px;
+        font-style: italic;
+      }
+      @media (max-width: 720px) {
+        .media-grid.col-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media print {
+        .media-placeholder {
+          display: none;
+        }
+      }
+
+      /* ── Contact / Footer ── */
+      #contact {
+        padding: 64px 0;
+        text-align: center;
+      }
+      .contact-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.4px;
+      }
+      .contact-sub {
+        font-size: 15px;
+        color: var(--clr-sub);
+        margin-bottom: 32px;
+      }
+      .contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .contact-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        background: var(--clr-surface);
+        color: var(--clr-text);
+        border: 1px solid var(--clr-border);
+        transition: all 0.2s;
+      }
+      .contact-link:hover {
+        background: var(--clr-accent);
+        color: #fff;
+        border-color: var(--clr-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      }
+      footer {
+        border-top: 1px solid var(--clr-border);
+        padding: 24px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--clr-sub);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 720px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-photo {
+          width: 120px;
+          height: 120px;
+          justify-self: start;
+          order: -1;
+        }
+        .hero-name {
+          font-size: 28px;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+        .project-body {
+          grid-template-columns: 1fr;
+        }
+        .compare-grid {
+          grid-template-columns: 1fr;
+        }
+        .tabs-nav {
+          flex-direction: column;
+          border-radius: 10px;
+        }
+        .tab-btn {
+          border-right: none;
+          border-bottom: 1px solid var(--clr-border);
+        }
+        .tab-btn:last-child {
+          border-bottom: none;
+        }
+        nav .nav-links {
+          display: none;
+        }
+      }
+
+      /* ── Print Styles ── */
+      @media print {
+        @page {
+          size: A4;
+          margin: 20mm 18mm;
+        }
+        nav,
+        .btn-print,
+        .hero-links,
+        .tabs-nav {
+          display: none !important;
+        }
+        body {
+          font-size: 12px;
+          background: #fff;
+        }
+        section {
+          padding: 24px 0;
+        }
+        .container {
+          padding: 0;
+        }
+        .project-card,
+        .detail-card,
+        .about-card {
+          box-shadow: none;
+          border: 1px solid #ddd;
+        }
+        .tab-panel {
+          display: block !important;
+        }
+        .tab-panel + .tab-panel {
+          margin-top: 20px;
+          page-break-before: always;
+        }
+        .hero-name {
+          font-size: 26px;
+        }
+        .section-title {
+          font-size: 18px;
+        }
+        .compare-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-inner">
+        <a class="nav-logo" href="#hero">황수연</a>
+        <ul class="nav-links">
+          <li><a href="#about">소개</a></li>
+          <li><a href="#project">프로젝트</a></li>
+          <li><a href="#details">세부 내용</a></li>
+          <li><a href="#contact">연락처</a></li>
+        </ul>
+        <button class="btn-print" onclick="window.print()">PDF 저장</button>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <p class="section-label">Frontend Developer</p>
+            <h1 class="hero-name">
+              황수연
+              <span>.</span>
+            </h1>
+            <p class="hero-title">회고를 통해 성장하는 프론트엔드 개발자</p>
+            <div class="hero-desc">
+              <p>
+                프로젝트를 진행하며 단순히 기능을 구현하는 데서 그치지 않고, 문제의 원인과 개선 방향을 꾸준히 기록하고
+                다음에 반영하는 방식으로 개발해왔습니다.
+              </p>
+              <p>
+                인증 구조 개선, 이미지 최적화, 모바일 환경 확장과 같은 작업을 수행하며 단순 구현을 넘어 사용자 경험과
+                성능, 플랫폼 특성을 함께 고려하는 개발을 지향합니다.
+              </p>
+            </div>
+            <div class="hero-links">
+              <a class="hero-link primary" href="#project">프로젝트 보기</a>
+              <a class="hero-link secondary" href="https://github.com/H-sooyeon" target="_blank">GitHub →</a>
+            </div>
+          </div>
+          <div class="hero-photo">
+            <img src="assets/profile.jpeg" alt="황수연 프로필 사진" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About & Skills -->
+    <section id="about">
+      <div class="container">
+        <p class="section-label">About</p>
+        <h2 class="section-title">학력 &amp; 기술</h2>
+        <div class="about-grid">
+          <!-- Education -->
+          <div class="about-card">
+            <h3>
+              <span class="dot"></span>
+              학력 및 교육
+            </h3>
+
+            <!-- 전남대학교 -->
+            <div class="edu-item">
+              <div class="edu-top">
+                <div class="school">전남대학교</div>
+                <div class="period">2020.03 – 2024.02</div>
+              </div>
+              <div class="degree">
+                소프트웨어공학과 학사 졸업&nbsp;&nbsp;
+                <span style="color: var(--clr-accent); font-weight: 600">GPA 4.17 / 4.5</span>
+              </div>
+              <ul class="edu-activities">
+                <li>JAVA / JAVA-Swing 기반 RA 활동 — 구문 자동 완성 기능 구현</li>
+                <li>KCC 2023 한국컴퓨터종합학술대회 학부생 포스터 발표</li>
+                <li>국제학술대회 논문 공동저자 참여</li>
+              </ul>
+              <div class="edu-paper">
+                「Ranked Syntax Completion Using LR Parsing」
+                <br />
+                ACM/SIGAPP SAC 2024 · Avila, Spain
+              </div>
+            </div>
+
+            <!-- 카카오테크캠퍼스 -->
+            <div class="edu-item">
+              <div class="edu-top">
+                <div class="school">카카오 — 카카오테크캠퍼스 1기</div>
+                <div class="period">2023.03 – 2023.11</div>
+              </div>
+              <ul class="edu-activities">
+                <li>웹 접근성 기준 학습 및 포괄적인 웹 서비스 설계 방법론 이해</li>
+                <li>
+                  팀 프로젝트
+                  <strong>모르는개산책</strong>
+                  GitHub 협업 개발
+                </li>
+              </ul>
+              <div style="margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap">
+                <span class="edu-badge award">🏆 아이디어톤 장려상</span>
+                <span class="edu-badge award">🏆 기획발표 우수상</span>
+              </div>
+            </div>
+
+            <!-- 네이버 부스트캠프 -->
+            <div class="edu-item">
+              <div class="edu-top">
+                <div class="school">네이버 — 부스트캠프 피어캠프 10기</div>
+                <div class="period">2025.07 – 2026.02</div>
+              </div>
+              <ul class="edu-activities">
+                <li>피드백 기반 동료 코드 리뷰 및 개선사항 제안으로 협업 역량 강화</li>
+                <li>
+                  팀 프로젝트
+                  <strong>잇다(Ittda)</strong>
+                  GitHub 협업 개발
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- Skills -->
+          <div class="about-card">
+            <h3>
+              <span class="dot"></span>
+              기술 스택
+            </h3>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Language</div>
+              <div class="skill-item">
+                <span class="skill-name">JavaScript</span>
+                <span class="skill-desc">실행 원리와 핵심 개념을 이해하며 ES6+ 문법을 능숙하게 사용합니다.</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">TypeScript</span>
+                <span class="skill-desc">
+                  타입 별칭과 인터페이스의 차이를 이해하며, 유틸리티 타입을 적절히 활용해 타입 안전성을 확보합니다.
+                </span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Framework &amp; Library</div>
+              <div class="skill-item">
+                <span class="skill-name">React</span>
+                <span class="skill-desc">Hooks를 능숙하게 사용하며 함수형 컴포넌트 중심으로 개발합니다.</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">React Query</span>
+                <span class="skill-desc">
+                  서버 상태 관리와 데이터 캐싱을 선호하며, 중앙 에러 핸들링으로 중복 코드를 줄인 경험이 있습니다.
+                </span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Next.js</span>
+                <span class="skill-desc">서버/클라이언트 컴포넌트 차이를 이해하며 App Router 사용에 익숙합니다.</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Zustand / Context</span>
+                <span class="skill-desc">
+                  전역 상태와 페이지 단위 로컬 상태의 경계를 고려하여 생명주기에 맞는 구조를 설계합니다.
+                </span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Styling</div>
+              <div class="skill-item">
+                <span class="skill-name">Tailwind CSS</span>
+                <span class="skill-desc">유틸리티 클래스 기반으로 반응형 디자인을 빠르게 구현합니다.</span>
+              </div>
+              <div class="skill-item">
+                <span class="skill-name">Styled-Components</span>
+                <span class="skill-desc">컴포넌트 단위 스타일 캡슐화로 재사용 가능한 UI를 설계합니다.</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Etc</div>
+              <div class="tags">
+                <span class="tag">Capacitor</span>
+                <span class="tag">PWA</span>
+                <span class="tag">Socket.IO</span>
+                <span class="tag">Git</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section id="project">
+      <div class="container">
+        <p class="section-label">Project</p>
+        <h2 class="section-title">프로젝트</h2>
+        <div class="project-card">
+          <div class="project-header">
+            <img class="project-icon" src="assets/ittda_logo.png" alt="잇다 아이콘 사진" />
+            <div>
+              <div class="project-name">잇다 (Ittda)</div>
+              <div class="project-tagline">개인의 기록을 넘어, 함께 추억을 쌓는 기록 서비스</div>
+            </div>
+          </div>
+          <div class="project-meta">
+            <div class="meta-item">
+              <strong>기간</strong>
+              7주
+            </div>
+            <div class="meta-item">
+              <strong>인원</strong>
+              FE 2 / BE 2
+            </div>
+            <div class="meta-item">
+              <strong>역할</strong>
+              프론트엔드, 인증 설계, 성능 개선, 모바일 확장
+            </div>
+            <div class="meta-item">
+              <strong>스택</strong>
+              Next.js · TS · Tailwind · React Query · Zustand · Socket.IO
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-screenshot">
+              <!-- 스크린샷 추가 시: <img src="assets/ittda-screen.png" alt="잇다 서비스 화면" /> -->
+              <span style="font-size: 28px">📸</span>
+              <span>서비스 화면 (추후 추가)</span>
+            </div>
+            <div class="contributions">
+              <h4>주요 기여</h4>
+              <ul>
+                <li>Next-auth 기반 통합 인증 시스템 설계</li>
+                <li>이미지 로딩 구조 개선 및 캐싱 전략 도입</li>
+                <li>PWA 한계 개선 및 Capacitor 기반 모바일 앱 확장</li>
+                <li>Context API 기반 상태 격리 구조 설계</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Details -->
+    <section id="details">
+      <div class="container">
+        <p class="section-label">Deep Dive</p>
+        <h2 class="section-title">기술적 의사결정</h2>
+
+        <!-- Tab Navigation -->
+        <div class="tabs-nav">
+          <button class="tab-btn active" onclick="switchTab(0)">🔐 인증 &amp; 슬라이딩 세션</button>
+          <button class="tab-btn" onclick="switchTab(1)">🖼 이미지 최적화</button>
+          <button class="tab-btn" onclick="switchTab(2)">📱 모바일 확장</button>
+          <button class="tab-btn" onclick="switchTab(3)">🎨 디자인 의사결정</button>
+          <button class="tab-btn" onclick="switchTab(4)">🗂 상태관리 구조</button>
+        </div>
+
+        <!-- Tab 1: 인증 & 슬라이딩 세션 -->
+        <div class="tab-panel active">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3>인증 구조 개선과 사용자 경험 향상</h3>
+              <p>Sliding Session 도입으로 세션 만료 문제 해결</p>
+            </div>
+            <div class="detail-sections">
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>Refresh Token 만료로 인해 사용 중 갑작스러운 로그아웃 발생</li>
+                  <li>기록 작성 중 세션 만료 → 작성 데이터 유실</li>
+                  <li>사용자 피드백: "로그인이 너무 자주 풀린다"</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">비교 검토</div>
+                <div class="compare-grid">
+                  <div class="compare-item">
+                    <h5>기존 방식 유지</h5>
+                    <div class="compare-pros">구현 단순</div>
+                    <div class="compare-cons">UX 저하, 재로그인 빈번</div>
+                  </div>
+                  <div class="compare-item">
+                    <h5>Access Token만 재발급</h5>
+                    <div class="compare-pros">서버 부담 적음</div>
+                    <div class="compare-cons">Refresh Token 만료 문제 근본 해결 불가</div>
+                  </div>
+                  <div class="compare-item chosen">
+                    <div class="chosen-badge">선택</div>
+                    <h5>Sliding Session</h5>
+                    <div class="compare-pros">활동 기반 세션 연장 → UX 개선</div>
+                    <div class="compare-cons">토큰 관리 복잡도 증가</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">선택 이유</div>
+                <div class="result-highlight">
+                  서비스 특성상 "기록 작성 중 끊김"은 치명적인 UX 문제이므로, 보안 복잡도 증가보다 UX 저하 리스크가 더
+                  크다고 판단했습니다.
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결</div>
+                <ul>
+                  <li>Refresh Token 만료 7일 이전 자동 재발급 로직 구현</li>
+                  <li>Access Token 재발급 시 Refresh Token도 함께 갱신</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>로그인 유지 경험 개선</li>
+                  <li>작업 중 세션 만료로 인한 데이터 유실 방지</li>
+                  <li>사용자 피드백 기반 UX 개선 성공</li>
+                </ul>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-2">
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">🖼</span>
+                      <span>인증 플로우 다이어그램</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/auth-flow.png" alt="인증 플로우" /> -->
+                  </div>
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">▶</span>
+                      <span>슬라이딩 세션 시연 영상</span>
+                    </div>
+                    <!-- 추가 시: <video src="assets/auth-demo.mp4" controls></video> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">배운 점</div>
+                <div class="learn-box">
+                  인증은 단순 보안 로직이 아니라 UX 설계 요소입니다. 사용자의 행동 패턴을 고려한 설계가 얼마나
+                  중요한지를 직접 경험했습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: 이미지 최적화 -->
+        <div class="tab-panel">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3>이미지 로딩 구조 개선과 보안 강화</h3>
+              <p>Proxy API + 캐싱 전략 도입 및 코드 리뷰를 통한 보안 개선</p>
+            </div>
+            <div class="detail-sections">
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>Presigned URL 방식 → 캐싱 불가</li>
+                  <li>이미지마다 개별 요청 발생 → N+1 문제</li>
+                  <li>메인 스레드 블로킹 발생</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">비교 검토</div>
+                <div class="compare-grid">
+                  <div class="compare-item">
+                    <h5>클라이언트 fetch 유지</h5>
+                    <div class="compare-pros">구조 단순</div>
+                    <div class="compare-cons">성능 저하, 캐싱 불가</div>
+                  </div>
+                  <div class="compare-item">
+                    <h5>Batch API 도입</h5>
+                    <div class="compare-pros">요청 수 감소</div>
+                    <div class="compare-cons">Presigned URL 특성상 캐시 불가</div>
+                  </div>
+                  <div class="compare-item chosen">
+                    <div class="chosen-badge">선택</div>
+                    <h5>Proxy API + 캐싱</h5>
+                    <div class="compare-pros">캐싱 가능, 성능 개선</div>
+                    <div class="compare-cons">서버 부하 증가</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">선택 이유</div>
+                <div class="result-highlight">
+                  요청 수 감소보다 캐시 히트율이 더 중요하다고 판단했습니다. 재방문 사용자 경험 개선을 우선시했습니다.
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결 — 1차</div>
+                <ul>
+                  <li>
+                    <code style="font-size: 12.5px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px">
+                      /api/media-image/[id]
+                    </code>
+                    기반 Proxy API 설계
+                  </li>
+                  <li>Sharp를 활용한 WebP 자동 변환</li>
+                  <li>
+                    <code style="font-size: 12.5px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px">
+                      Cache-Control: immutable
+                    </code>
+                    적용
+                  </li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title" style="color: #ef4444">추가 발견 (코드 리뷰)</div>
+                <ul>
+                  <li>캐시된 이미지가 인증 없이 외부에 노출될 가능성 발견</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">최종 개선 — 보안 강화</div>
+                <ul>
+                  <li>이미지 데이터를 민감 정보로 재정의</li>
+                  <li>ETag + no-cache 전략 적용</li>
+                  <li>매 요청마다 인증 검증 + 변경 없으면 304 응답으로 트래픽 최소화</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>이미지 렌더링 속도 개선</li>
+                  <li>캐시 효율 증가</li>
+                  <li>인증 우회 보안 리스크 제거</li>
+                </ul>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-2">
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">🖼</span>
+                      <span>Proxy API 구조 다이어그램</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/image-proxy-arch.png" alt="Proxy API 구조" /> -->
+                  </div>
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">📊</span>
+                      <span>로딩 속도 개선 전/후 비교</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/image-perf-compare.png" alt="성능 비교" /> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">배운 점</div>
+                <div class="learn-box">
+                  성능 최적화는 항상 보안과 트레이드오프 관계입니다. 코드 리뷰는 단순한 수정 과정이 아니라 설계를
+                  개선하는 기회임을 배웠습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: 모바일 확장 -->
+        <div class="tab-panel">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3>웹 서비스를 모바일 앱으로 확장</h3>
+              <p>Capacitor 기반 하이브리드 앱 전환</p>
+            </div>
+            <div class="detail-sections">
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>웹 서비스만으로는 앱 스토어 배포 불가</li>
+                  <li>모바일 환경에서 UX 품질 부족</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">비교 검토</div>
+                <div class="compare-grid">
+                  <div class="compare-item">
+                    <h5>PWA 유지</h5>
+                    <div class="compare-pros">개발 비용 낮음</div>
+                    <div class="compare-cons">브라우저별 제약, UX 한계</div>
+                  </div>
+                  <div class="compare-item">
+                    <h5>네이티브 앱 개발</h5>
+                    <div class="compare-pros">완전한 기능 지원</div>
+                    <div class="compare-cons">비용과 시간 부담 큼</div>
+                  </div>
+                  <div class="compare-item chosen">
+                    <div class="chosen-badge">선택</div>
+                    <h5>Capacitor 하이브리드</h5>
+                    <div class="compare-pros">웹 재사용 + 네이티브 기능 활용</div>
+                    <div class="compare-cons">플랫폼별 개별 대응 필요</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">선택 이유</div>
+                <div class="result-highlight">
+                  제한된 리소스 내에서 빠른 확장이 필요했으며, 기존 웹 자산을 최대한 활용하는 것이 가장 효율적인
+                  전략이었습니다.
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결</div>
+                <ul>
+                  <li>Capacitor 기반 Android 앱 구성</li>
+                  <li>SNS 로그인 후 앱 복귀 처리 구현</li>
+                  <li>플랫폼별 URL 스킴 분기 처리 (iOS / Android)</li>
+                  <li>WebView ↔ Native Bridge 통신 구현</li>
+                  <li>상태바 / 인디케이터 영역 처리 및 웹·네이티브 UI 일관성 유지</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>웹 서비스를 Android 앱으로 성공적으로 확장</li>
+                  <li>앱 스토어 배포 가능한 구조 확보</li>
+                </ul>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-2">
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">📱</span>
+                      <span>앱 실행 화면 스크린샷</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/app-screenshot.png" alt="앱 화면" /> -->
+                  </div>
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">▶</span>
+                      <span>SNS 로그인 → 앱 복귀 시연</span>
+                    </div>
+                    <!-- 추가 시: <video src="assets/capacitor-demo.mp4" controls></video> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">배운 점</div>
+                <div class="learn-box">
+                  동일한 코드베이스라도 웹과 앱은 전혀 다른 UX를 요구합니다. 플랫폼 특성을 깊이 이해하지 않으면 기능은
+                  동작하지만 사용감이 어색한 결과가 나온다는 것을 직접 체험했습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: 디자인 의사결정 -->
+        <div class="tab-panel">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3>디자인 생산성 개선을 위한 도구 선택</h3>
+              <p>Google Studio 도입으로 제한된 리소스 안에서 디자인 품질 확보</p>
+            </div>
+            <div class="detail-sections">
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>Figma 기반 수작업 진행 → 시간 소모가 큼</li>
+                  <li>디자인 퀄리티에 한계 존재</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">비교 검토</div>
+                <div class="compare-grid">
+                  <div class="compare-item">
+                    <h5>기존 방식 유지</h5>
+                    <div class="compare-pros">익숙한 워크플로우</div>
+                    <div class="compare-cons">생산성 낮음</div>
+                  </div>
+                  <div class="compare-item">
+                    <h5>디자이너 의존</h5>
+                    <div class="compare-pros">완성도 높은 퀄리티 확보</div>
+                    <div class="compare-cons">팀 리소스 부족으로 비현실적</div>
+                  </div>
+                  <div class="compare-item chosen">
+                    <div class="chosen-badge">선택</div>
+                    <h5>Google Studio 활용</h5>
+                    <div class="compare-pros">빠른 레이아웃 생성</div>
+                    <div class="compare-cons">커스터마이징 추가 작업 필요</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">선택 이유</div>
+                <div class="result-highlight">
+                  제한된 시간 안에 높은 퀄리티가 필요한 상황에서, 개발 리소스만으로 해결 가능한 방식을 선택했습니다.
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결</div>
+                <ul>
+                  <li>팀원 설득 후 Google Studio 도입</li>
+                  <li>생성된 디자인을 베이스로 서비스에 맞게 커스터마이징</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>디자인 품질 향상</li>
+                  <li>전반적인 개발 속도 개선</li>
+                </ul>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-2">
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">🎨</span>
+                      <span>도입 전 디자인</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/design-before.png" alt="도입 전" /> -->
+                  </div>
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">✨</span>
+                      <span>도입 후 디자인</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/design-after.png" alt="도입 후" /> -->
+                  </div>
+                </div>
+                <p class="media-caption">Google Studio 도입 전/후 비교</p>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">배운 점</div>
+                <div class="learn-box">
+                  좋은 결과는 기술력뿐 아니라 도구 선택에서도 나옵니다. 상황에 맞는 도구를 선택하고 팀을 설득하는 것도
+                  개발자의 역량임을 배웠습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: 상태관리 구조 개선 -->
+        <div class="tab-panel">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3>상태 생명주기를 고려한 구조 개선</h3>
+              <p>Zustand에서 Context API로 전환하여 페이지 단위 상태 격리</p>
+            </div>
+            <div class="detail-sections">
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li>Zustand 사용 시 페이지 이탈 후에도 데이터가 잔존</li>
+                  <li>전역 상태 오염으로 인한 예기치 않은 동작 가능성</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">개선</div>
+                <ul>
+                  <li>Context API 기반 페이지 단위 상태 관리 구조로 전환</li>
+                  <li>컴포넌트 마운트/언마운트 사이클에 맞춰 상태 생명주기 자동 관리</li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">결과</div>
+                <ul>
+                  <li>페이지 이탈 시 상태 자동 초기화 — 데이터 잔존 문제 해소</li>
+                  <li>상태 범위가 명확해져 유지보수 안정성 향상</li>
+                </ul>
+              </div>
+
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-1">
+                  <div class="media-item">
+                    <div class="media-placeholder">
+                      <span class="icon">🗂</span>
+                      <span>상태 구조 변경 전/후 다이어그램</span>
+                    </div>
+                    <!-- 추가 시: <img src="assets/state-arch.png" alt="상태 구조 다이어그램" /> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">배운 점</div>
+                <div class="learn-box">
+                  상태 관리에서 중요한 것은 "어디까지 살아야 하는가"입니다. 전역 상태와 로컬 상태의 경계를 명확히
+                  설계하는 것이 버그를 예방하는 첫걸음임을 배웠습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="contact-title">함께 이야기 나눠요</h2>
+        <p class="contact-sub">새로운 기회나 협업에 열려 있습니다.</p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:wndqhr__@naver.com">✉️ wndqhr__@naver.com</a>
+          <a class="contact-link" href="https://github.com/H-sooyeon" target="_blank">🐙 GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 황수연 · Frontend Developer</p>
+    </footer>
+
+    <script>
+      function switchTab(index) {
+        const panels = document.querySelectorAll(".tab-panel");
+        const buttons = document.querySelectorAll(".tab-btn");
+        panels.forEach((p, i) => p.classList.toggle("active", i === index));
+        buttons.forEach((b, i) => b.classList.toggle("active", i === index));
+      }
+    </script>
+  </body>
+</html>
