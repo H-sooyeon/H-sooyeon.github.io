@@ -1557,10 +1557,34 @@
         <div class="tab-panel">
           <div class="detail-card">
             <div class="detail-card-header">
-              <h3>웹 서비스를 모바일 앱으로 확장</h3>
-              <p>Capacitor 기반 하이브리드 앱 전환</p>
+              <h3>PWA 한계 개선 및 Capacitor 기반 모바일 앱 확장</h3>
+              <p>브라우저 제약 극복 → 하이브리드 앱 전환</p>
             </div>
             <div class="detail-sections">
+
+              <!-- ── Part 1: PWA 한계 개선 ── -->
+              <div class="detail-divider"><span>Part 1 · PWA 구축 및 한계 개선</span></div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">문제</div>
+                <ul>
+                  <li><span>빌드 타임에 생성되는 <code class="ic">manifest.json</code>만으로는 다크/라이트 테마 전환 시 시스템 UI(주소창) 색상 실시간 동기화 불가</span></li>
+                  <li>브라우저별로 상이한 PWA 설치 프로세스로 인한 사용자 혼란 예측 <a class="pr-badge" href="#" target="_blank">ADR</a></li>
+                </ul>
+              </div>
+
+              <div class="detail-block">
+                <div class="detail-block-title">해결</div>
+                <ul>
+                  <li><span><strong>테마 깜빡임 방지</strong> — JS 로드 전 HTML 헤더 단계에서 <code class="ic">localStorage</code>를 확인해 메타 태그를 즉시 수정하는 인라인 스크립트 삽입 → 앱 실행 시 테마 색상이 뒤늦게 적용되는 시각적 노이즈 제거</span></li>
+                  <li><span><strong>사용자 주도 설치 유도</strong> — <code class="ic">beforeinstallprompt</code> 이벤트를 캡처해 서비스 내 설치 배너 구현, 해당 이벤트를 미지원하는 브라우저(Safari, Vivaldi 등)를 위한 커스텀 안내 모달 별도 제작</span></li>
+                  <li><span><code class="ic">display-mode: standalone</code> 감지로 중복 배너 노출 제어 → 네이티브 앱에 가까운 사용 경험 제공</span></li>
+                </ul>
+              </div>
+
+              <!-- ── Part 2: Capacitor 확장 ── -->
+              <div class="detail-divider"><span>Part 2 · Capacitor 기반 앱 확장</span></div>
+
               <div class="detail-block">
                 <div class="detail-block-title">문제</div>
                 <ul>
