@@ -1940,7 +1940,16 @@
               <div class="detail-block">
                 <div class="detail-block-title">결과</div>
                 <ul>
-                  <li>이미지 렌더링 속도 개선</li>
+                  <li>
+                    Lighthouse Performance 점수
+                    <strong>38 → 60</strong>
+                    향상
+                  </li>
+                  <li>
+                    동일 이미지 용량
+                    <strong>69.5kB → 42.8kB</strong>
+                    (약 38% 절감)
+                  </li>
                   <li>캐시 효율 증가</li>
                   <li>인증 우회 보안 리스크 제거</li>
                 </ul>
@@ -1952,12 +1961,19 @@
                   <div class="media-item">
                     <img src="assets/image-proxy-arch.png" alt="Proxy API 구조" />
                   </div>
-                  <div class="media-item">
-                    <div class="media-placeholder">
-                      <span class="icon">📊</span>
-                      <span>로딩 속도 개선 전/후 비교</span>
+                  <div class="media-grid col-1">
+                    <div>
+                      <div class="media-item">
+                        <img src="assets/refactor-before.png" alt="개선 전 Lighthouse 점수" />
+                      </div>
+                      <p class="media-caption">개선 전</p>
                     </div>
-                    <!-- 추가 시: <img src="assets/image-perf-compare.png" alt="성능 비교" /> -->
+                    <div>
+                      <div class="media-item">
+                        <img src="assets/refactor-after.png" alt="개선 후 Lighthouse 점수" />
+                      </div>
+                      <p class="media-caption">개선 후</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1965,8 +1981,8 @@
               <div class="detail-block">
                 <div class="detail-block-title">배운 점</div>
                 <div class="learn-box">
-                  성능 최적화는 항상 보안과 트레이드오프 관계입니다. 코드 리뷰는 단순한 수정 과정이 아니라 설계를
-                  개선하는 기회임을 배웠습니다.
+                  성능 최적화는 보안과 트레이드오프 관계이며 코드 리뷰는 단순한 수정 과정이 아니라 설계를 개선하는
+                  기회임을 배웠습니다.
                 </div>
               </div>
             </div>
@@ -2321,10 +2337,14 @@
         document.body.style.overflow = "";
       }
 
-      document.querySelectorAll(".project-screenshot img, .media-item img, img.design, .project-details img:not(.project-icon)").forEach((img) => {
-        img.style.cursor = "zoom-in";
-        img.addEventListener("click", () => openLightbox(img.src, img.alt));
-      });
+      document
+        .querySelectorAll(
+          ".project-screenshot img, .media-item img, img.design, .project-details img:not(.project-icon)"
+        )
+        .forEach((img) => {
+          img.style.cursor = "zoom-in";
+          img.addEventListener("click", () => openLightbox(img.src, img.alt));
+        });
 
       lightboxClose.addEventListener("click", closeLightbox);
       lightbox.addEventListener("click", (e) => {
