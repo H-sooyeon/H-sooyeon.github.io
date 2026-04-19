@@ -1669,6 +1669,13 @@
               </ul>
             </div>
           </div>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px;">
+            <div class="media-item"><img src="assets/screen_one.png" alt="앱 화면 1" /></div>
+            <div class="media-item"><img src="assets/screen_two.png" alt="앱 화면 2" /></div>
+            <div class="media-item"><img src="assets/screen_three.png" alt="앱 화면 3" /></div>
+            <div class="media-item"><img src="assets/screen_four.png" alt="앱 화면 4" /></div>
+            <div class="media-item"><img src="assets/screen_five.png" alt="앱 화면 5" /></div>
+          </div>
         </div>
       </div>
     </section>
@@ -2047,6 +2054,15 @@
                 </ul>
               </div>
 
+              <div class="media-block">
+                <div class="media-block-title">화면 / 시연</div>
+                <div class="media-grid col-1">
+                  <div class="media-item">
+                    <video src="assets/pwa-app-exec.mov" controls muted playsinline></video>
+                  </div>
+                </div>
+              </div>
+
               <!-- ── Part 2: Capacitor 확장 ── -->
               <div class="detail-divider"><span>Part 2 · Capacitor 기반 앱 확장</span></div>
 
@@ -2109,20 +2125,13 @@
 
               <div class="media-block">
                 <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-2">
-                  <div class="media-item">
-                    <div class="media-placeholder">
-                      <span class="icon">📱</span>
-                      <span>앱 실행 화면 스크린샷</span>
-                    </div>
-                    <!-- 추가 시: <img src="assets/app-screenshot.png" alt="앱 화면" /> -->
+                <div class="media-grid col-2" style="align-items: stretch;">
+                  <div class="media-item" style="display: flex; gap: 8px;">
+                    <img src="assets/app-exec1.jpeg" alt="앱 실행 화면 - 기록 작성" style="flex: 1; min-width: 0; object-fit: contain;" />
+                    <img src="assets/app-exec4.jpeg" alt="앱 실행 화면 - 캘린더" style="flex: 1; min-width: 0; object-fit: contain;" />
                   </div>
-                  <div class="media-item">
-                    <div class="media-placeholder">
-                      <span class="icon">▶</span>
-                      <span>SNS 로그인 → 앱 복귀 시연</span>
-                    </div>
-                    <!-- 추가 시: <video src="assets/capacitor-demo.mp4" controls></video> -->
+                  <div class="media-item" style="align-self: start;">
+                    <video src="assets/sns-login.mp4" controls muted playsinline style="width: 100%; height: auto; display: block;"></video>
                   </div>
                 </div>
               </div>
@@ -2286,7 +2295,6 @@
               </div>
             </div>
           </div>
-        </div>
       </div>
     </section>
 
