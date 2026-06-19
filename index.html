@@ -43,6 +43,46 @@
         -webkit-font-smoothing: antialiased;
       }
 
+      /* ── Motion ── */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.55s ease,
+          transform 0.55s ease;
+      }
+      .reveal.revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hero-enter {
+        opacity: 0;
+        animation: fadeUp 0.6s ease-out forwards;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .reveal,
+        .reveal.revealed,
+        .hero-enter {
+          opacity: 1;
+          transform: none;
+          animation: none;
+          transition: none;
+        }
+      }
+
       /* ── Nav ── */
       nav {
         position: sticky;
@@ -74,14 +114,31 @@
         list-style: none;
       }
       .nav-links a {
+        position: relative;
         text-decoration: none;
         font-size: 13.5px;
         font-weight: 500;
         color: var(--clr-sub);
         transition: color 0.2s;
       }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        height: 2px;
+        background: var(--clr-accent);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.25s ease;
+      }
       .nav-links a:hover {
         color: var(--clr-accent);
+      }
+      .nav-links a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
       }
       .btn-print {
         font-size: 12.5px;
@@ -387,6 +444,11 @@
       }
 
       /* ── Project Overview ── */
+      .project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
       .project-card {
         background: var(--clr-surface);
         border: 1px solid var(--clr-border);
@@ -410,6 +472,11 @@
         justify-content: center;
         font-size: 24px;
         flex-shrink: 0;
+        object-fit: cover;
+      }
+      .project-icon.round {
+        border-radius: 50%;
+        background: none;
       }
       .project-name {
         font-size: 22px;
@@ -496,46 +563,210 @@
         flex-shrink: 0;
       }
 
-      /* ── Detail Tabs ── */
-      .tabs-nav {
+      /* ── Detail Triggers ── */
+      .detail-trigger-list {
         display: flex;
-        gap: 0;
-        margin-bottom: 28px;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .detail-trigger {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        text-align: left;
+        padding: 20px 22px;
+        background: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+          border-color 0.2s,
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .detail-trigger:hover {
+        border-color: var(--clr-accent);
+        transform: translateY(-2px);
+        box-shadow:
+          0 8px 20px rgba(79, 70, 229, 0.14),
+          0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      .detail-trigger-icon {
+        font-size: 22px;
+        flex-shrink: 0;
+      }
+      .detail-trigger-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+      }
+      .detail-trigger-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--clr-text);
+      }
+      .detail-trigger-desc {
+        font-size: 13px;
+        color: var(--clr-sub);
+      }
+      .detail-trigger-arrow {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--clr-accent);
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: transform 0.2s ease;
+      }
+      .detail-trigger:hover .detail-trigger-arrow {
+        transform: translateX(3px);
+      }
+
+      /* ── Detail Modal ── */
+      .detail-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .detail-modal.open {
+        display: flex;
+      }
+      .detail-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(17, 24, 39, 0.55);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .detail-modal.show .detail-modal-backdrop {
+        opacity: 1;
+      }
+      .detail-modal-panel {
+        position: relative;
+        background: var(--clr-surface);
+        border-radius: 18px;
+        max-width: 760px;
+        width: 100%;
+        max-height: 86vh;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+        transition:
+          opacity 0.25s ease,
+          transform 0.25s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .detail-modal.show .detail-modal-panel {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .detail-modal-scroll {
+        overflow-y: auto;
+        padding: 8px;
+        border-radius: inherit;
+      }
+      .detail-modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--clr-border);
+        background: var(--clr-surface);
+        color: var(--clr-sub);
+        font-size: 16px;
+        cursor: pointer;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .detail-modal-close:hover {
+        background: var(--clr-accent);
+        color: #fff;
+        border-color: var(--clr-accent);
+      }
+      .detail-modal .detail-card {
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+
+      /* ── Problem Accordion ── */
+      .problem-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .problem-item {
         border: 1px solid var(--clr-border);
         border-radius: 10px;
         overflow: hidden;
-        background: var(--clr-surface);
-      }
-      .tab-btn {
-        flex: 1;
-        padding: 12px 8px;
-        font-size: 13px;
-        font-weight: 500;
-        font-family: inherit;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        color: var(--clr-sub);
-        transition: all 0.2s;
-        border-right: 1px solid var(--clr-border);
-        line-height: 1.4;
-      }
-      .tab-btn:last-child {
-        border-right: none;
-      }
-      .tab-btn:hover {
         background: var(--clr-bg);
+      }
+      .problem-item summary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 16px;
+        cursor: pointer;
+        list-style: none;
+        font-weight: 600;
+        font-size: 14px;
         color: var(--clr-text);
+        transition: background 0.15s;
       }
-      .tab-btn.active {
-        background: var(--clr-accent);
-        color: #fff;
-      }
-      .tab-panel {
+      .problem-item summary::-webkit-details-marker {
         display: none;
       }
-      .tab-panel.active {
-        display: block;
+      .problem-item summary:hover {
+        background: var(--clr-accent-light);
+      }
+      .problem-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--clr-accent);
+        background: var(--clr-accent-light);
+        border-radius: 6px;
+        padding: 3px 7px;
+        flex-shrink: 0;
+      }
+      .problem-item summary::after {
+        content: "+";
+        margin-left: auto;
+        font-size: 17px;
+        font-weight: 400;
+        color: var(--clr-accent);
+        transition: transform 0.2s ease;
+        flex-shrink: 0;
+      }
+      .problem-item[open] summary::after {
+        transform: rotate(45deg);
+      }
+      .problem-item-body {
+        padding: 6px 16px 20px;
+        border-top: 1px solid var(--clr-border);
+        background: var(--clr-surface);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .problem-item-body .detail-block:first-child {
+        margin-top: 14px;
       }
 
       /* ── Detail Card ── */
@@ -701,6 +932,9 @@
       .media-grid.col-2 {
         grid-template-columns: 1fr 1fr;
       }
+      .media-grid.col-5 {
+        grid-template-columns: repeat(5, 1fr);
+      }
       .media-item {
         position: relative;
         border-radius: 10px;
@@ -753,6 +987,9 @@
       @media (max-width: 720px) {
         .media-grid.col-2 {
           grid-template-columns: 1fr;
+        }
+        .media-grid.col-5 {
+          grid-template-columns: repeat(2, 1fr);
         }
       }
       @media print {
@@ -936,16 +1173,21 @@
         .compare-grid {
           grid-template-columns: 1fr;
         }
-        .tabs-nav {
-          flex-direction: column;
-          border-radius: 10px;
+        .detail-trigger {
+          flex-wrap: wrap;
+          padding: 16px 18px;
         }
-        .tab-btn {
-          border-right: none;
-          border-bottom: 1px solid var(--clr-border);
+        .detail-trigger-arrow {
+          margin-left: 38px;
         }
-        .tab-btn:last-child {
-          border-bottom: none;
+        .detail-modal {
+          padding: 0;
+        }
+        .detail-modal-panel {
+          max-width: 100%;
+          max-height: 100%;
+          height: 100%;
+          border-radius: 0;
         }
         nav .nav-links {
           display: none;
@@ -963,10 +1205,19 @@
         nav,
         .btn-print,
         .hero-links,
-        .tabs-nav,
+        .detail-trigger-list,
+        .detail-modal-close,
+        .detail-modal-backdrop,
         .media-block,
         .peer-feedback {
           display: none !important;
+        }
+
+        /* 스크롤 reveal 애니메이션은 인쇄 시 항상 보이도록 강제 */
+        .reveal {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
         }
 
         /* ── 표지 ── */
@@ -1129,9 +1380,38 @@
           border: 1px solid #ddd;
         }
 
-        /* 탭 패널 전체 표시 */
-        .tab-panel {
+        /* 모달 콘텐츠 전체 표시 */
+        .detail-modal {
           display: block !important;
+          position: static !important;
+          padding: 0 !important;
+          z-index: auto !important;
+          page-break-before: always;
+        }
+        .detail-modal-panel {
+          position: static !important;
+          max-width: 100% !important;
+          max-height: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        }
+        .detail-modal-scroll {
+          overflow: visible !important;
+          padding: 0 !important;
+        }
+
+        /* 아코디언(문제점 & 해결 방법)도 인쇄 시 전부 펼쳐서 표시 */
+        details,
+        details > * {
+          display: block !important;
+        }
+        .problem-item summary {
+          pointer-events: none;
+        }
+        .problem-item summary::after {
+          display: none !important;
         }
 
         /* 섹션 단위 페이지 구분 */
@@ -1141,9 +1421,6 @@
         #project {
           page-break-before: always;
         }
-        #details {
-          page-break-before: always;
-        }
         #contact {
           display: none;
         }
@@ -1151,8 +1428,8 @@
           display: none;
         }
 
-        /* 탭 패널 사이 페이지 구분 */
-        .tab-panel + .tab-panel {
+        /* 모달 사이 페이지 구분 */
+        .detail-modal + .detail-modal {
           margin-top: 0;
           page-break-before: always;
         }
@@ -1401,27 +1678,27 @@
         </li>
         <li class="toc-item toc-parent">
           <span class="toc-num">04</span>
-          <span class="toc-text">기술적 의사결정</span>
+          <span class="toc-text">문제점 &amp; 해결 방법</span>
         </li>
         <li class="toc-sub">
           <span class="toc-sub-dot"></span>
-          Next-auth 통합 인증 설계 &amp; Sliding Session 도입
+          기록 작성 중 세션 만료로 데이터를 잃는 문제 해결
         </li>
         <li class="toc-sub">
           <span class="toc-sub-dot"></span>
-          이미지 로딩 구조 개선 &amp; 보안 강화
+          환경별로 흩어진 인증 처리를 공통 fetch로 통합
         </li>
         <li class="toc-sub">
           <span class="toc-sub-dot"></span>
-          PWA 한계 개선 &amp; Capacitor 모바일 앱 확장
+          이미지 접근 보안 강화 및 캐시 구조 재설계
         </li>
         <li class="toc-sub">
           <span class="toc-sub-dot"></span>
-          디자인 생산성 개선을 위한 도구 선택
+          초기 진입 시 빈 화면 노출 시간 개선
         </li>
-        <li class="toc-sub">
-          <span class="toc-sub-dot"></span>
-          상태 생명주기를 고려한 구조 개선
+        <li class="toc-item">
+          <span class="toc-num">05</span>
+          <span class="toc-text">프로젝트 소개 — Athens</span>
         </li>
       </ol>
     </div>
@@ -1433,7 +1710,6 @@
         <ul class="nav-links">
           <li><a href="#about">소개</a></li>
           <li><a href="#project">프로젝트</a></li>
-          <li><a href="#details">세부 내용</a></li>
           <li><a href="#contact">연락처</a></li>
         </ul>
         <button class="btn-print" onclick="window.print()">PDF 저장</button>
@@ -1445,37 +1721,47 @@
       <div class="container">
         <div class="hero-grid">
           <div>
-            <p class="section-label">Frontend Developer</p>
-            <h1 class="hero-name">
+            <p class="section-label hero-enter" style="animation-delay: 0s">Frontend Developer</p>
+            <h1 class="hero-name hero-enter" style="animation-delay: 0.06s">
               황수연
               <span>.</span>
             </h1>
-            <p class="hero-title">회고를 통해 성장하는 프론트엔드 개발자</p>
-            <div class="hero-desc">
+            <p class="hero-title hero-enter" style="animation-delay: 0.12s">회고를 통해 성장하는 프론트엔드 개발자</p>
+            <div class="hero-desc hero-enter" style="animation-delay: 0.18s">
               <p>
-                프로젝트를 진행하며 단순히 기능을 구현하는 데서 그치지 않고, 문제의 원인과 개선 방향을 꾸준히 기록하고
-                다음에 반영하는 방식으로 개발해왔습니다.
+                어떤 문제든 왜 발생했는지 이해하고, 상황에 맞는 기술과 방법을 선택해 해결하는 과정을 좋아합니다. 항상
+                최신 기술이 정답이라고 생각하지 않으며, trade - off를 충분히 따져 더 나은 선택을 하려 노력합니다.
               </p>
               <p>
-                인증 구조 개선, 이미지 최적화, 모바일 환경 확장과 같은 작업을 수행하며 단순 구현을 넘어 사용자 경험과
-                성능, 플랫폼 특성을 함께 고려하는 개발을 지향합니다.
+                이러한 판단의 과정은 ADR, PR, Discussion으로 정리해 팀과 함께 점검하고 합의하며, 포지션에 관계없이
+                적극적으로 의견을 나누는 것을 즐깁니다. 앞으로도 다양한 제약과 환경 속에서 현실적인 최선을 찾고, 그
+                과정을 투명하게 공유하며 팀과 함께 성장하는 개발자가 되고자 합니다.
               </p>
             </div>
-            <div class="hero-links">
+            <div class="hero-links hero-enter" style="animation-delay: 0.24s">
               <a class="hero-link primary" href="#project">프로젝트 보기</a>
               <a class="hero-link secondary" href="https://github.com/H-sooyeon" target="_blank">GitHub →</a>
             </div>
-            <div class="peer-feedback">
+            <div class="peer-feedback hero-enter" style="animation-delay: 0.3s">
               <div class="quote-icon">💬</div>
               <div>
                 <div class="quote-text">
                   확실한 근거로 소통하며 프로젝트에 책임을 다하고, 긍정적인 에너지로 팀의 몰입을 돕는다.
                 </div>
-                <div class="quote-source">— 부스트캠프 피어캠프 동료 피드백</div>
+                <div class="quote-source">
+                  —
+                  <a
+                    href="https://drive.google.com/file/d/1uVp1O-IS-pjM9hmMNtmSIMg0RsPdn5FI/view?usp=sharing"
+                    target="_blank"
+                    style="color: inherit; text-decoration: underline"
+                  >
+                    부스트캠프 피어캠프 동료 피드백
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-          <div class="hero-photo">
+          <div class="hero-photo hero-enter" style="animation-delay: 0.12s">
             <img src="assets/profile.jpeg" alt="황수연 프로필 사진" />
           </div>
         </div>
@@ -1489,7 +1775,7 @@
         <h2 class="section-title">학력 &amp; 기술</h2>
         <div class="about-grid">
           <!-- Education -->
-          <div class="about-card">
+          <div class="about-card reveal">
             <h3>
               <span class="dot"></span>
               학력 및 교육
@@ -1521,7 +1807,7 @@
             <div class="edu-item">
               <div class="edu-top">
                 <div class="school">카카오 — 카카오테크캠퍼스 1기</div>
-                <div class="period">2023.03 – 2023.11</div>
+                <div class="period">2023.04 – 2023.11</div>
               </div>
               <ul class="edu-activities">
                 <li>웹 접근성 기준 학습 및 포괄적인 웹 서비스 설계 방법론 이해</li>
@@ -1541,7 +1827,7 @@
             <div class="edu-item">
               <div class="edu-top">
                 <div class="school">네이버 — 부스트캠프 피어캠프 10기</div>
-                <div class="period">2025.07 – 2026.02</div>
+                <div class="period">2025.08 – 2026.02</div>
               </div>
               <ul class="edu-activities">
                 <li>피드백 기반 동료 코드 리뷰 및 개선사항 제안으로 협업 역량 강화</li>
@@ -1554,7 +1840,7 @@
             </div>
           </div>
           <!-- Skills -->
-          <div class="about-card">
+          <div class="about-card reveal">
             <h3>
               <span class="dot"></span>
               기술 스택
@@ -1613,10 +1899,9 @@
             <div class="skill-group">
               <div class="skill-group-label">Etc</div>
               <div class="tags">
-                <span class="tag">Capacitor</span>
-                <span class="tag">PWA</span>
-                <span class="tag">Socket.IO</span>
                 <span class="tag">Git</span>
+                <span class="tag">GitHub</span>
+                <span class="tag">Vercel</span>
               </div>
             </div>
           </div>
@@ -1629,681 +1914,634 @@
       <div class="container">
         <p class="section-label">Project</p>
         <h2 class="section-title">프로젝트</h2>
-        <div class="project-card">
-          <div class="project-header">
-            <img class="project-icon" src="assets/ittda_logo.png" alt="잇다 아이콘 사진" />
-            <div>
-              <div class="project-name">잇다 (Ittda)</div>
-              <div class="project-tagline">개인의 기록을 넘어, 함께 추억을 쌓는 기록 서비스</div>
+        <div class="project-list">
+          <div class="project-card reveal">
+            <div class="project-header">
+              <img class="project-icon" src="assets/ittda_logo.png" alt="잇다 아이콘 사진" />
+              <div>
+                <div class="project-name">잇다 (Ittda)</div>
+                <div class="project-tagline">개인의 기록을 넘어, 함께 추억을 쌓는 기록 서비스</div>
+              </div>
             </div>
-          </div>
-          <div class="project-meta">
-            <div class="meta-item">
-              <strong>기간</strong>
-              7주
+            <div class="project-meta">
+              <div class="meta-item">
+                <strong>기간</strong>
+                2025.12 - 2026.04
+              </div>
+              <div class="meta-item">
+                <strong>인원</strong>
+                FE 2 / BE 2
+              </div>
+              <div class="meta-item">
+                <strong>역할</strong>
+                프론트엔드
+              </div>
+              <div class="meta-item">
+                <strong>스택</strong>
+                Next.js · TypeScript · Tailwind CSS · Tanstack Query · Zustand
+              </div>
             </div>
-            <div class="meta-item">
-              <strong>인원</strong>
-              FE 2 / BE 2
-            </div>
-            <div class="meta-item">
-              <strong>역할</strong>
-              프론트엔드, 인증 설계, 성능 개선, 모바일 확장
-            </div>
-            <div class="meta-item">
-              <strong>스택</strong>
-              Next.js · TS · Tailwind · React Query · Zustand · Socket.IO
-            </div>
-          </div>
-          <div class="project-body">
-            <div class="project-screenshot">
+            <div class="project-screenshot" style="aspect-ratio: 16 / 9; margin-top: 4px">
               <img src="assets/ittda_thumbnail.png" alt="잇다 서비스 화면" />
             </div>
-            <div class="contributions">
-              <h4>주요 기여</h4>
-              <ul>
-                <li>Next-auth 기반 통합 인증 시스템 설계</li>
-                <li>이미지 로딩 구조 개선 및 캐싱 전략 도입</li>
-                <li>PWA 한계 개선 및 Capacitor 기반 모바일 앱 확장</li>
-                <li>Context API 기반 상태 격리 구조 설계</li>
-              </ul>
+            <div class="detail-trigger-list" style="margin-top: 20px">
+              <button class="detail-trigger" type="button" data-modal-target="modal-ittda">
+                <span class="detail-trigger-icon">📄</span>
+                <span class="detail-trigger-text">
+                  <span class="detail-trigger-title">잇다 프로젝트 상세 보기</span>
+                  <span class="detail-trigger-desc">
+                    소개, 기술 스택, 문제 해결 과정과 아키텍처를 한 곳에서 확인하세요
+                  </span>
+                </span>
+                <span class="detail-trigger-arrow">상세내용 보기 →</span>
+              </button>
             </div>
           </div>
-          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 20px;">
-            <div class="media-item"><img src="assets/screen_one.png" alt="앱 화면 1" /></div>
-            <div class="media-item"><img src="assets/screen_two.png" alt="앱 화면 2" /></div>
-            <div class="media-item"><img src="assets/screen_three.png" alt="앱 화면 3" /></div>
-            <div class="media-item"><img src="assets/screen_four.png" alt="앱 화면 4" /></div>
-            <div class="media-item"><img src="assets/screen_five.png" alt="앱 화면 5" /></div>
+
+          <div class="project-card reveal">
+            <div class="project-header">
+              <img class="project-icon round" src="assets/athens-icon.png" alt="Athens 아이콘 사진" />
+              <div>
+                <div class="project-name">Athens</div>
+                <div class="project-tagline">자유롭게 의견을 표현하고 설득하는 익명 토론 플랫폼</div>
+              </div>
+            </div>
+            <div class="project-meta">
+              <div class="meta-item">
+                <strong>기간</strong>
+                2024.04 - 2024.12
+              </div>
+              <div class="meta-item">
+                <strong>인원</strong>
+                FE 2 / BE 3
+              </div>
+              <div class="meta-item">
+                <strong>역할</strong>
+                프론트엔드
+              </div>
+              <div class="meta-item">
+                <strong>스택</strong>
+                Next.js · TypeScript · Tailwind CSS · React Query · Zustand
+              </div>
+            </div>
+            <div class="project-screenshot" style="aspect-ratio: 16 / 9; margin-top: 4px">
+              <img
+                src="https://github.com/Athens-org/athens-backend/assets/78211281/ea728cc6-0ce5-4308-ae9e-bb41c8d98ea9"
+                alt="Athens 서비스 화면"
+              />
+            </div>
+            <div class="detail-trigger-list" style="margin-top: 20px">
+              <button class="detail-trigger" type="button" data-modal-target="modal-athens">
+                <span class="detail-trigger-icon">📄</span>
+                <span class="detail-trigger-text">
+                  <span class="detail-trigger-title">Athens 프로젝트 상세 보기</span>
+                  <span class="detail-trigger-desc">소개, 기술 스택, 기여 역할과 주요 기능을 한 곳에서 확인하세요</span>
+                </span>
+                <span class="detail-trigger-arrow">상세내용 보기 →</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Project Details -->
-    <section id="details">
-      <div class="container">
-        <p class="section-label">Deep Dive</p>
-        <h2 class="section-title">기술적 의사결정</h2>
-
-        <!-- Tab Navigation -->
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab(0)">🔐 인증 &amp; 슬라이딩 세션</button>
-          <button class="tab-btn" onclick="switchTab(1)">🖼 이미지 최적화</button>
-          <button class="tab-btn" onclick="switchTab(2)">📱 모바일 확장</button>
-          <button class="tab-btn" onclick="switchTab(3)">🎨 디자인 의사결정</button>
-          <button class="tab-btn" onclick="switchTab(4)">🗂 상태관리 구조</button>
-        </div>
-
-        <!-- Tab 1: 인증 & 슬라이딩 세션 -->
-        <div class="tab-panel active">
+    <!-- Project Detail Modal -->
+    <div class="detail-modal" id="modal-ittda" aria-hidden="true">
+      <div class="detail-modal-backdrop" data-modal-close></div>
+      <div class="detail-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-ittda-title">
+        <button class="detail-modal-close" data-modal-close aria-label="닫기">✕</button>
+        <div class="detail-modal-scroll">
           <div class="detail-card">
             <div class="detail-card-header">
-              <h3>Next-auth 통합 인증 설계 → Sliding Session 도입</h3>
-              <p>환경 간 데이터 단절 해결 · 동시성 제어 · 세션 만료 UX 개선</p>
+              <h3 id="modal-ittda-title">잇다 (Ittda)</h3>
+              <p>개인의 기록을 넘어, 함께 추억을 쌓는 기록 서비스</p>
             </div>
             <div class="detail-sections">
-              <!-- ── Part 1: Next-auth 통합 인증 ── -->
-              <div class="detail-divider"><span>Part 1 · Next-auth 통합 인증 설계</span></div>
-
+              <!-- 1. 프로젝트 소개 -->
               <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>클라이언트 메모리 기반 Access Token 관리 → 서버 컴포넌트에서 토큰 접근 불가</li>
-                  <li>SSR 시 인증 데이터 패칭이 불가능한 결함 발견</li>
-                </ul>
+                <div class="detail-block-title">📋 프로젝트 소개</div>
+                <p style="font-size: 14px; color: #374151; line-height: 1.75">
+                  개인의 기록을 넘어, 함께 추억을 쌓는 기록 서비스입니다. 네이버 부스트캠프 10기에서 FE 2명 · BE 2명으로
+                  진행했으며, 기록을 끊김 없이 작성할 수 있는 경험을 핵심 가치로 두고 인증·이미지·성능 전반의 문제를
+                  직접 진단하고 개선했습니다.
+                </p>
               </div>
 
+              <!-- 2. 관련 링크 -->
               <div class="detail-block">
-                <div class="detail-block-title">해결</div>
-                <ul>
-                  <li>
-                    <span>
-                      Next-auth v5 도입 — 세션 정보를 암호화된 쿠키로 관리해 서버·클라이언트 어디서든 최신 세션 접근
-                      가능한 통합 인증 인터페이스 구축
-                      <a
-                        class="pr-badge"
-                        href="https://github.com/boostcampwm2025/web25-ittda/pull/138"
-                        target="_blank"
-                      >
-                        PR #138
-                      </a>
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      서버 컴포넌트 병렬 요청 시 발생하는 RTR(Refresh Token Rotation)
-                      <code class="ic">reuse detected</code>
-                      에러 → JWT 콜백 기반 갱신 로직 일원화 및 백엔드 Grace Period 도입 제안·적용
-                      <a
-                        class="pr-badge"
-                        href="https://github.com/boostcampwm2025/web25-ittda/pull/145"
-                        target="_blank"
-                      >
-                        PR #145
-                      </a>
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      런타임 환경에 무관하게 최신 인증 헤더를 자동 주입하는 단일
-                      <code class="ic">fetchApi</code>
-                      유틸 구축 → 코드 응집도 향상 및 보안 강화
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>서버·클라이언트 컴포넌트 간 인증 상태 동기화 — 데이터 단절 문제 해결</li>
-                  <li>병렬 요청 환경에서의 동시성 문제 제어</li>
-                </ul>
-              </div>
-
-              <!-- ── Part 2: Sliding Session ── -->
-              <div class="detail-divider"><span>Part 2 · Sliding Session 도입</span></div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>Refresh Token 만료로 인해 사용 중 갑작스러운 로그아웃 발생</li>
-                  <li>기록 작성 중 세션 만료 → 작성 데이터 유실</li>
-                  <li>사용자 피드백: "로그인이 너무 자주 풀린다"</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">비교 검토</div>
-                <div class="compare-grid">
-                  <div class="compare-item">
-                    <h5>기존 방식 유지</h5>
-                    <div class="compare-pros">구현 단순</div>
-                    <div class="compare-cons">UX 저하, 재로그인 빈번</div>
-                  </div>
-                  <div class="compare-item">
-                    <h5>Access Token만 재발급</h5>
-                    <div class="compare-pros">서버 부담 적음</div>
-                    <div class="compare-cons">Refresh Token 만료 문제 근본 해결 불가</div>
-                  </div>
-                  <div class="compare-item chosen">
-                    <div class="chosen-badge">선택</div>
-                    <h5>Sliding Session</h5>
-                    <div class="compare-pros">활동 기반 세션 연장 → UX 개선</div>
-                    <div class="compare-cons">토큰 관리 복잡도 증가</div>
-                  </div>
+                <div class="detail-block-title">🔗 관련 링크</div>
+                <div class="header-badges" style="margin-top: 0">
+                  <a class="pr-badge" href="https://github.com/boostcampwm2025/web25-ittda" target="_blank">
+                    🐙 GitHub
+                  </a>
+                  <a
+                    class="pr-badge"
+                    href="https://velog.io/@dobby_/nextjs-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A1%9C%EB%93%9C-%EC%B5%9C%EC%A0%81%ED%99%94"
+                    target="_blank"
+                  >
+                    📝 이미지 최적화 포스트
+                  </a>
+                  <a class="pr-badge" href="https://ittda.vercel.app/" target="_blank">사이트</a>
                 </div>
               </div>
 
+              <!-- 3. 기술 스택 -->
               <div class="detail-block">
-                <div class="detail-block-title">선택 이유</div>
-                <div class="result-highlight">
-                  서비스 특성상 "기록 작성 중 끊김"은 치명적인 UX 문제이므로, 보안 복잡도 증가보다 UX 저하 리스크가 더
-                  크다고 판단했습니다.
-                  <a
-                    class="pr-badge"
-                    href="https://github.com/boostcampwm2025/web25-ittda/discussions/272"
-                    target="_blank"
-                  >
-                    Discussions #272
+                <div class="detail-block-title">🧩 기술 스택</div>
+                <div class="tags">
+                  <span class="tag accent">Next.js</span>
+                  <span class="tag accent">TypeScript</span>
+                  <span class="tag accent">Tailwind CSS</span>
+                  <span class="tag accent">Tanstack Query</span>
+                  <span class="tag accent">Zustand</span>
+                </div>
+              </div>
+
+              <!-- 4. 기여 역할 -->
+              <div class="detail-block">
+                <div class="detail-block-title">🙋 기여 역할</div>
+                <ul>
+                  <li>Next-auth 기반 통합 인증 및 Sliding Session 설계</li>
+                  <li>환경별로 흩어진 인증 처리를 통합하는 공통 fetchApi 유틸 설계</li>
+                  <li>이미지 접근 보안 강화 및 캐시 구조 재설계</li>
+                  <li>초기 진입 시 빈 화면 노출 시간 개선</li>
+                </ul>
+              </div>
+
+              <!-- 5. 문제점 & 해결 방법 -->
+              <div class="detail-block">
+                <div class="detail-block-title">🛠 문제점 &amp; 해결 방법</div>
+                <div class="problem-accordion">
+                  <details class="problem-item" open>
+                    <summary>
+                      <span class="problem-num">01</span>
+                      기록 작성 중 세션 만료로 데이터를 잃는 문제 해결
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            "잇다"의 핵심 가치는 기록을 끊김 없이 작성하는 것이었으나, "작성 중 세션 만료로 처음부터
+                            다시 써야 한다"는 사용자 피드백 발생
+                          </li>
+                          <li>
+                            기존 Access Token은 클라이언트 메모리에만 보관되어, 미들웨어·서버 컴포넌트·요청 어디서도
+                            만료 감지 및 갱신 트리거가 불가능했음
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              Next-auth(v5) 도입으로 세션을 암호화 쿠키 기반으로 재설계해 서버·클라이언트 어디서든 동일
+                              세션 접근 및 갱신 가능하도록 수정
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/boostcampwm2025/web25-ittda/pull/138"
+                                target="_blank"
+                              >
+                                PR #138
+                              </a>
+                            </span>
+                          </li>
+                          <li>
+                            <span>
+                              서버 컴포넌트 병렬 요청 시 RTR(Refresh Token Rotation) 재사용 에러 발생 → JWT 콜백 기반
+                              갱신 로직 일원화 및 백엔드 Grace Period 도입 제안·적용
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/boostcampwm2025/web25-ittda/pull/145"
+                                target="_blank"
+                              >
+                                PR #145
+                              </a>
+                            </span>
+                          </li>
+                          <li>
+                            <span>
+                              Refresh Token 만료 7일 전 자동 갱신되는 Sliding Session 적용
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/boostcampwm2025/web25-ittda/discussions/272"
+                                target="_blank"
+                              >
+                                Discussion #272
+                              </a>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>기록 작성 중 세션 만료로 인한 데이터 유실 문제 해결</li>
+                          <li>로그인 유지 경험 개선</li>
+                        </ul>
+                      </div>
+                      <div class="media-block">
+                        <div class="media-block-title">아키텍처</div>
+                        <div class="media-grid col-2">
+                          <div>
+                            <div class="media-item"><img src="assets/auth-flow.png" alt="인증 플로우" /></div>
+                            <p class="media-caption">Next-auth 통합 인증 플로우</p>
+                          </div>
+                          <div>
+                            <div class="media-item">
+                              <img src="assets/auth-sliding.png" alt="Sliding Session 플로우" />
+                            </div>
+                            <p class="media-caption">Sliding Session 플로우</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="problem-item">
+                    <summary>
+                      <span class="problem-num">02</span>
+                      환경별로 흩어진 인증 처리를 공통 fetch로 통합
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            인증 구조 개선 과정에서 서버·클라이언트·API 라우트마다 인증 헤더 주입 및 토큰 만료 처리
+                            로직이 중복 구현되어 있음을 발견
+                          </li>
+                          <li>
+                            인증 처리 방식 변경 시 여러 곳을 일일이 수정해야 했고, 누락 시 인증 오류로 이어질 위험 존재
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              서버/클라이언트 환경별 Base URL을 자동 분기하는 공통
+                              <code class="ic">fetchApi</code>
+                              유틸 설계 — 인증 헤더 자동 주입, 401 시 토큰 갱신 후 재요청, 갱신 실패 시 로그아웃까지
+                              일원화
+                            </span>
+                          </li>
+                          <li>
+                            TypeScript로 요청·응답 타입을 정의해 호출부가 인증 처리를 신경 쓰지 않도록 인터페이스 분리
+                          </li>
+                          <li>
+                            <span>
+                              <code class="ic">AbortController</code>
+                              기반 타임아웃을 적용해 응답 지연 시 요청을 자동 중단하고 TIMEOUT으로 즉시 처리
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>인증 처리 로직 일원화로 코드 응집도 및 개발 생산성 향상</li>
+                          <li>인증 로직 변경 시 누락으로 인한 보안 리스크 감소</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="problem-item">
+                    <summary>
+                      <span class="problem-num">03</span>
+                      이미지 접근 보안 강화 및 캐시 구조 재설계
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            "잇다"는 사용자의 일상을 기록하는 서비스로, 기록에 첨부되는 이미지는 대부분 개인적인 순간을
+                            담고 있어 타인이 쉽게 접근할 수 있다면 프라이버시 문제로 이어질 수 있음
+                          </li>
+                          <li>
+                            백엔드 리소스 제약으로 이미지를 Presigned URL로 서빙 → URL만 있으면 인증 없이 접근 가능해
+                            권한 우회 위험 존재, 요청마다 URL이 새로 발급되어 캐싱도 되지 않아 캐시 히트율이 0%에 가까움
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              <code class="ic">/api/media-image/[id]</code>
+                              형태의 불변 ID 기반 API Proxy 설계 — 매 요청마다 인증을 검증한 뒤 백엔드에서 Presigned
+                              URL을 받아 대신 서빙
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/boostcampwm2025/web25-ittda/pull/264"
+                                target="_blank"
+                              >
+                                PR #264
+                              </a>
+                            </span>
+                          </li>
+                          <li>
+                            ETag(=media ID) + no-cache 적용 — 요청마다 인증을 재검증하면서도, 변경되지 않은 리소스는
+                            304로 응답해 재다운로드·재인코딩 비용 절감
+                          </li>
+                          <li>Route Handler에서 Sharp로 WebP 변환까지 함께 처리해 전송 용량도 최적화</li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>인증 우회 위험을 제거하면서도 캐싱 가능한 구조 확보 (보안·성능 동시 달성)</li>
+                          <li>
+                            캐시가 전혀 동작하지 않던 이미지 응답을, 재조회 시 304로 응답해 캐시 히트가 발생하는 구조로
+                            전환
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="media-block">
+                        <div class="media-block-title">아키텍처</div>
+                        <div class="media-grid col-1">
+                          <div>
+                            <div class="media-item">
+                              <img src="assets/image-proxy-arch.png" alt="이미지 Proxy API 구조" />
+                            </div>
+                            <p class="media-caption">이미지 Proxy API 구조</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="problem-item">
+                    <summary>
+                      <span class="problem-num">04</span>
+                      초기 진입 시 빈 화면 노출 시간 개선
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            사용자로부터 "앱 진입 시 빈 화면이 길게 노출된다"는 피드백을 받아 초기 로딩 성능 점검 필요성
+                            발생
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            빌드 파일 분석으로 불필요한 요청 제거
+                            <a
+                              class="pr-badge"
+                              href="https://github.com/boostcampwm2025/web25-ittda/pull/286"
+                              target="_blank"
+                            >
+                              PR #286
+                            </a>
+                          </li>
+                          <li>초기 로드에 불필요한 CSS/JS 제거</li>
+                          <li>
+                            <span>
+                              이미지
+                              <code class="ic">fetchPriority</code>
+                              지정 및 lazy 로딩 적용, 상세 페이지 이미지 우선순위 지정
+                            </span>
+                          </li>
+                          <li>Google Maps를 브라우저 유휴 상태일 때 로드해 메인 스레드 점유 방지</li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>
+                            Lighthouse Performance 점수
+                            <strong>38 → 60</strong>
+                            개선
+                          </li>
+                          <li>초기 진입 시 빈 화면 노출 시간 단축</li>
+                        </ul>
+                      </div>
+                      <div class="media-block">
+                        <div class="media-block-title">화면 / 시연</div>
+                        <div class="media-grid col-2">
+                          <div>
+                            <div class="media-item">
+                              <img src="assets/refactor-before.png" alt="개선 전 Lighthouse 점수" />
+                            </div>
+                            <p class="media-caption">개선 전</p>
+                          </div>
+                          <div>
+                            <div class="media-item">
+                              <img src="assets/refactor-after.png" alt="개선 후 Lighthouse 점수" />
+                            </div>
+                            <p class="media-caption">개선 후</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+              <!-- 6. 주요 기능 이미지 -->
+              <div class="media-block">
+                <div class="media-block-title">🖼 주요 기능 이미지</div>
+                <div class="media-grid col-5">
+                  <div class="media-item"><img src="assets/screen_one.png" alt="앱 화면 1" /></div>
+                  <div class="media-item"><img src="assets/screen_two.png" alt="앱 화면 2" /></div>
+                  <div class="media-item"><img src="assets/screen_three.png" alt="앱 화면 3" /></div>
+                  <div class="media-item"><img src="assets/screen_four.png" alt="앱 화면 4" /></div>
+                  <div class="media-item"><img src="assets/screen_five.png" alt="앱 화면 5" /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Detail Modal: Athens -->
+    <div class="detail-modal" id="modal-athens" aria-hidden="true">
+      <div class="detail-modal-backdrop" data-modal-close></div>
+      <div class="detail-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-athens-title">
+        <button class="detail-modal-close" data-modal-close aria-label="닫기">✕</button>
+        <div class="detail-modal-scroll">
+          <div class="detail-card">
+            <div class="detail-card-header">
+              <h3 id="modal-athens-title">Athens</h3>
+              <p>자유롭게 의견을 표현하고 설득하는 익명 토론 플랫폼</p>
+            </div>
+            <div class="detail-sections">
+              <!-- 1. 프로젝트 소개 -->
+              <div class="detail-block">
+                <div class="detail-block-title">📋 프로젝트 소개</div>
+                <p style="font-size: 14px; color: #374151; line-height: 1.75">
+                  실명으로 의견을 제시할 때 느껴지는 부담과, 답글 형식 토론의 느린 피드백이라는 한계를 해결하기 위해
+                  만든 익명 토론 플랫폼입니다. 익명성을 토론에 접목해 더 자유롭고 활발한 의견 교환을 가능하게 하면서도,
+                  강퇴 투표와 메시지 필터링으로 욕설·비방 같은 익명성의 부작용을 함께 보완했습니다. FE 2명 · BE 3명으로
+                  진행했습니다.
+                </p>
+              </div>
+
+              <!-- 2. 관련 링크 -->
+              <div class="detail-block">
+                <div class="detail-block-title">🔗 관련 링크</div>
+                <div class="header-badges" style="margin-top: 0">
+                  <a class="pr-badge" href="https://github.com/Attica-org/athens-client" target="_blank">🐙 GitHub</a>
+                  <a class="pr-badge" href="https://athens-client-mu.vercel.app" target="_blank">사이트</a>
+                  <a class="pr-badge" href="https://github.com/Attica-org/athens-client/wiki" target="_blank">
+                    📖 Wiki
                   </a>
                 </div>
               </div>
 
+              <!-- 3. 기술 스택 -->
               <div class="detail-block">
-                <div class="detail-block-title">해결</div>
+                <div class="detail-block-title">🧩 기술 스택</div>
+                <div class="tags">
+                  <span class="tag accent">JavaScript</span>
+                  <span class="tag accent">TypeScript</span>
+                  <span class="tag accent">Next.js</span>
+                  <span class="tag accent">Tailwind CSS</span>
+                  <span class="tag accent">React Query</span>
+                  <span class="tag accent">Zustand</span>
+                  <span class="tag accent">MSW</span>
+                </div>
+              </div>
+
+              <!-- 4. 기여 역할 -->
+              <div class="detail-block">
+                <div class="detail-block-title">🙋 기여 역할</div>
                 <ul>
-                  <li>Refresh Token 만료 7일 이전 자동 재발급 로직 구현</li>
-                  <li>Access Token 재발급 시 Refresh Token도 함께 갱신</li>
+                  <li>로그인, 사용자 정보 조회 / 로그아웃 / 회원 탈퇴 등 인증 관련 화면 구현</li>
+                  <li>다크모드 / 화이트모드 테마 전환 기능 구현</li>
+                  <li>아고라(토론방) 생성 / 입장, 키워드 검색, 활성·종료 아고라 리스트 UI 구현</li>
+                  <li>실시간 채팅: 메시지 전송 / 반응, 참여자 목록, 채팅방 소셜 공유 기능 구현</li>
+                  <li>강퇴 투표, 비속어 필터링 등 익명 채팅 안전장치 기능 구현</li>
+                  <li>토론 시작 / 종료 플로우 및 종료된 아고라 열람 기능 구현</li>
                 </ul>
               </div>
 
+              <!-- 5. 문제점 & 해결 방법 -->
               <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>로그인 유지 경험 개선</li>
-                  <li>작업 중 세션 만료로 인한 데이터 유실 방지</li>
-                  <li>사용자 피드백 기반 UX 개선 성공</li>
-                </ul>
+                <div class="detail-block-title">🛠 문제점 &amp; 해결 방법</div>
+                <div class="placeholder-note">정리 중입니다. 곧 추가될 예정입니다.</div>
               </div>
 
+              <!-- 6. 아키텍처 -->
               <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-2">
-                  <div class="media-item">
-                    <img src="assets/auth-flow.png" alt="인증 플로우" />
-                  </div>
-                  <div class="media-item">
-                    <img src="assets/auth-sliding.png" alt="인증 플로우" />
-                  </div>
+                <div class="media-block-title">아키텍처</div>
+                <div class="media-placeholder">
+                  <span class="icon">🏗</span>
+                  <span>아키텍처 다이어그램 추가 예정</span>
                 </div>
               </div>
 
-              <div class="detail-block">
-                <div class="detail-block-title">배운 점</div>
-                <div class="learn-box">
-                  인증 로직을 개선하면서, 보안뿐 아니라 사용자 흐름까지 함께 고려해야 한다는 것을 경험했습니다.
-                  특히 세션 만료로 인해 작업이 끊기는 문제를 해결하며, 인증이 사용자 경험에 직접적인 영향을 준다는 것을 체감했습니다.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 2: 이미지 최적화 -->
-        <div class="tab-panel">
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <h3>이미지 로딩 구조 개선과 보안 강화</h3>
-              <p>Proxy API + 캐싱 전략 도입 및 코드 리뷰를 통한 보안 개선</p>
-              <div class="header-badges">
-                <a
-                  class="pr-badge"
-                  href="https://velog.io/@dobby_/nextjs-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A1%9C%EB%93%9C-%EC%B5%9C%EC%A0%81%ED%99%94"
-                  target="_blank"
-                >
-                  📝 블로그
-                </a>
-                <a class="pr-badge" href="https://github.com/boostcampwm2025/web25-ittda/pull/264" target="_blank">
-                  PR #264
-                </a>
-              </div>
-            </div>
-            <div class="detail-sections">
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>Presigned URL 방식 → 캐싱 불가</li>
-                  <li>이미지마다 개별 요청 발생 → N+1 문제</li>
-                  <li>메인 스레드 블로킹 발생</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">비교 검토</div>
-                <div class="compare-grid">
-                  <div class="compare-item">
-                    <h5>클라이언트 fetch 유지</h5>
-                    <div class="compare-pros">구조 단순</div>
-                    <div class="compare-cons">성능 저하, 캐싱 불가</div>
-                  </div>
-                  <div class="compare-item">
-                    <h5>Batch API 도입</h5>
-                    <div class="compare-pros">요청 수 감소</div>
-                    <div class="compare-cons">Presigned URL 특성상 캐시 불가</div>
-                  </div>
-                  <div class="compare-item chosen">
-                    <div class="chosen-badge">선택</div>
-                    <h5>Proxy API + 캐싱</h5>
-                    <div class="compare-pros">캐싱 가능, 성능 개선</div>
-                    <div class="compare-cons">서버 부하 증가</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">선택 이유</div>
-                <div class="result-highlight">
-                  요청 수 감소보다 캐시 히트율이 더 중요하다고 판단했습니다. 재방문 사용자 경험 개선을 우선시했습니다.
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">해결 — 1차</div>
-                <ul>
-                  <li>
-                    <code style="font-size: 12.5px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px">
-                      /api/media-image/[id]
-                    </code>
-                    기반 Proxy API 설계
-                  </li>
-                  <li>Sharp를 활용한 WebP 자동 변환</li>
-                  <li>
-                    <code style="font-size: 12.5px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px">
-                      Cache-Control: immutable
-                    </code>
-                    적용
-                  </li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title" style="color: #ef4444">추가 발견 (코드 리뷰)</div>
-                <ul>
-                  <li>캐시된 이미지가 인증 없이 외부에 노출될 가능성 발견</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">최종 개선 — 보안 강화</div>
-                <ul>
-                  <li>이미지 데이터를 민감 정보로 재정의</li>
-                  <li>ETag + no-cache 전략 적용</li>
-                  <li>매 요청마다 인증 검증 + 변경 없으면 304 응답으로 트래픽 최소화</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>
-                    Lighthouse Performance 점수
-                    <strong>38 → 60</strong>
-                    향상
-                  </li>
-                  <li>
-                    동일 이미지 용량
-                    <strong>69.5kB → 42.8kB</strong>
-                    (약 38% 절감)
-                  </li>
-                  <li>캐시 효율 증가</li>
-                  <li>인증 우회 보안 리스크 제거</li>
-                </ul>
-              </div>
-
+              <!-- 7. 주요 기능 이미지 -->
               <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-2">
-                  <div class="media-item">
-                    <img src="assets/image-proxy-arch.png" alt="Proxy API 구조" />
-                  </div>
-                  <div class="media-grid col-1">
-                    <div>
-                      <div class="media-item">
-                        <img src="assets/refactor-before.png" alt="개선 전 Lighthouse 점수" />
-                      </div>
-                      <p class="media-caption">개선 전</p>
+                <div class="media-block-title">🖼 주요 기능 이미지</div>
+                <div class="media-grid col-5">
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/2a6e09c8-b003-406a-b1d9-b1abb30250d1"
+                        alt="로그인"
+                      />
                     </div>
-                    <div>
-                      <div class="media-item">
-                        <img src="assets/refactor-after.png" alt="개선 후 Lighthouse 점수" />
-                      </div>
-                      <p class="media-caption">개선 후</p>
+                    <p class="media-caption">로그인</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/109fb2ba-3fe6-4993-b2bf-c604e0b6c334"
+                        alt="다크모드 / 화이트모드"
+                      />
                     </div>
+                    <p class="media-caption">다크모드 / 화이트모드</p>
                   </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">배운 점</div>
-                <div class="learn-box">
-                  이미지 최적화를 진행하는 과정에서 성능 개선이 보안과 충돌할 수 있다는 점을 경험했습니다.
-                  코드 리뷰를 통해 이러한 문제를 인지하고 구조를 보완하며, 리뷰 과정이 단순한 수정이 아니라 설계를 발전시키는 과정임을 배웠습니다.
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/0ccc9d7c-e108-4fad-9789-0878d12dfac8"
+                        alt="아고라 생성"
+                      />
+                    </div>
+                    <p class="media-caption">아고라 생성</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/df121614-6e4f-44d4-887f-8fcd8d13c58d"
+                        alt="아고라 입장"
+                      />
+                    </div>
+                    <p class="media-caption">아고라 입장</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/f9796edf-60d8-4edd-bd3c-904f0cf4f254"
+                        alt="메시지 전송"
+                      />
+                    </div>
+                    <p class="media-caption">메시지 전송</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/b79b1bda-d6a0-4a48-9815-6ceade6a6613"
+                        alt="비속어 필터링"
+                      />
+                    </div>
+                    <p class="media-caption">비속어 필터링</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/8051c39f-56d1-4774-bf58-76a9ad0ada3c"
+                        alt="강퇴(추방)"
+                      />
+                    </div>
+                    <p class="media-caption">강퇴(추방)</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/acc88d32-9ff9-4451-b536-06281bd09fbd"
+                        alt="토론 시작"
+                      />
+                    </div>
+                    <p class="media-caption">토론 시작</p>
+                  </div>
+                  <div>
+                    <div class="media-item">
+                      <img
+                        src="https://github.com/user-attachments/assets/7871770a-473f-492d-ace0-d761a073f16d"
+                        alt="종료된 아고라"
+                      />
+                    </div>
+                    <p class="media-caption">종료된 아고라</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Tab 3: 모바일 확장 -->
-        <div class="tab-panel">
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <h3>PWA 한계 개선 및 Capacitor 기반 모바일 앱 확장</h3>
-              <p>브라우저 제약 극복 → 하이브리드 앱 전환</p>
-            </div>
-            <div class="detail-sections">
-              <!-- ── Part 1: PWA 한계 개선 ── -->
-              <div class="detail-divider"><span>Part 1 · PWA 구축 및 한계 개선</span></div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>
-                    <span>
-                      빌드 타임에 생성되는
-                      <code class="ic">manifest.json</code>
-                      만으로는 다크/라이트 테마 전환 시 시스템 UI(주소창) 색상 실시간 동기화 불가
-                    </span>
-                  </li>
-                  <li>
-                    브라우저별로 상이한 PWA 설치 프로세스로 인한 사용자 혼란 예측
-                    <a class="pr-badge" href="#" target="_blank">ADR</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">해결</div>
-                <ul>
-                  <li>
-                    <span>
-                      <strong>테마 깜빡임 방지</strong>
-                      — JS 로드 전 HTML 헤더 단계에서
-                      <code class="ic">localStorage</code>
-                      를 확인해 메타 태그를 즉시 수정하는 인라인 스크립트 삽입 → 앱 실행 시 테마 색상이 뒤늦게 적용되는
-                      시각적 노이즈 제거
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <strong>사용자 주도 설치 유도</strong>
-                      —
-                      <code class="ic">beforeinstallprompt</code>
-                      이벤트를 캡처해 서비스 내 설치 배너 구현, 해당 이벤트를 미지원하는 브라우저(Safari, Vivaldi 등)를
-                      위한 커스텀 안내 모달 별도 제작
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <code class="ic">display-mode: standalone</code>
-                      감지로 중복 배너 노출 제어 → 네이티브 앱에 가까운 사용 경험 제공
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-1">
-                  <div class="media-item">
-                    <video src="assets/pwa-app-exec.mov" controls muted playsinline></video>
-                  </div>
-                </div>
-              </div>
-
-              <!-- ── Part 2: Capacitor 확장 ── -->
-              <div class="detail-divider"><span>Part 2 · Capacitor 기반 앱 확장</span></div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>웹 서비스만으로는 앱 스토어 배포 불가</li>
-                  <li>모바일 환경에서 UX 품질 부족</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">비교 검토</div>
-                <div class="compare-grid">
-                  <div class="compare-item">
-                    <h5>PWA 유지</h5>
-                    <div class="compare-pros">개발 비용 낮음</div>
-                    <div class="compare-cons">브라우저별 제약, UX 한계</div>
-                  </div>
-                  <div class="compare-item">
-                    <h5>네이티브 앱 개발</h5>
-                    <div class="compare-pros">완전한 기능 지원</div>
-                    <div class="compare-cons">비용과 시간 부담 큼</div>
-                  </div>
-                  <div class="compare-item chosen">
-                    <div class="chosen-badge">선택</div>
-                    <h5>Capacitor 하이브리드</h5>
-                    <div class="compare-pros">웹 재사용 + 네이티브 기능 활용</div>
-                    <div class="compare-cons">플랫폼별 개별 대응 필요</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">선택 이유</div>
-                <div class="result-highlight">
-                  제한된 리소스 내에서 빠른 확장이 필요했으며, 기존 웹 자산을 최대한 활용하는 것이 가장 효율적인
-                  전략이었습니다.
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">해결</div>
-                <ul>
-                  <li>Capacitor 기반 Android 앱 구성</li>
-                  <li>SNS 로그인 후 앱 복귀 처리 구현</li>
-                  <li>플랫폼별 URL 스킴 분기 처리 (iOS / Android)</li>
-                  <li>WebView ↔ Native Bridge 통신 구현</li>
-                  <li>상태바 / 인디케이터 영역 처리 및 웹·네이티브 UI 일관성 유지</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>웹 서비스를 Android 앱으로 성공적으로 확장</li>
-                  <li>앱 스토어 배포 가능한 구조 확보</li>
-                </ul>
-              </div>
-
-              <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-2" style="align-items: stretch;">
-                  <div class="media-item" style="display: flex; gap: 8px;">
-                    <img src="assets/app-exec1.jpeg" alt="앱 실행 화면 - 기록 작성" style="flex: 1; min-width: 0; object-fit: contain;" />
-                    <img src="assets/app-exec4.jpeg" alt="앱 실행 화면 - 캘린더" style="flex: 1; min-width: 0; object-fit: contain;" />
-                  </div>
-                  <div class="media-item" style="align-self: start;">
-                    <video src="assets/sns-login.mp4" controls muted playsinline style="width: 100%; height: auto; display: block;"></video>
-                  </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">배운 점</div>
-                <div class="learn-box">
-                  웹 서비스를 모바일 앱으로 확장하는 과정에서, 동일한 기능이라도 플랫폼에 따라 사용자 경험이 달라진다는 것을 체감했습니다.
-                  특히 로그인 흐름과 상태바, 인디케이터에서 차이가 발생하며, 플랫폼 특성을 고려한 설계의 중요성을 이해하게 되었습니다.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 4: 디자인 의사결정 -->
-        <div class="tab-panel">
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <h3>디자인 생산성 개선을 위한 도구 선택</h3>
-              <p>Google Studio 도입으로 제한된 리소스 안에서 디자인 품질 확보</p>
-            </div>
-            <div class="detail-sections">
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>Figma 기반 수작업 진행 → 시간 소모가 큼</li>
-                  <li>디자인 퀄리티에 한계 존재</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">비교 검토</div>
-                <div class="compare-grid">
-                  <div class="compare-item">
-                    <h5>기존 방식 유지</h5>
-                    <div class="compare-pros">익숙한 워크플로우</div>
-                    <div class="compare-cons">생산성 낮음</div>
-                  </div>
-                  <div class="compare-item">
-                    <h5>디자이너 의존</h5>
-                    <div class="compare-pros">완성도 높은 퀄리티 확보</div>
-                    <div class="compare-cons">팀 리소스 부족으로 비현실적</div>
-                  </div>
-                  <div class="compare-item chosen">
-                    <div class="chosen-badge">선택</div>
-                    <h5>Google Studio 활용</h5>
-                    <div class="compare-pros">빠른 레이아웃 생성</div>
-                    <div class="compare-cons">커스터마이징 추가 작업 필요</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">선택 이유</div>
-                <div class="result-highlight">
-                  제한된 시간 안에 높은 퀄리티가 필요한 상황에서, 개발 리소스만으로 해결 가능한 방식을 선택했습니다.
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">해결</div>
-                <ul>
-                  <li>팀원 설득 후 Google Studio 도입</li>
-                  <li>생성된 디자인을 베이스로 서비스에 맞게 커스터마이징</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>디자인 품질 향상</li>
-                  <li>전반적인 개발 속도 개선</li>
-                </ul>
-              </div>
-
-              <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-2">
-                  <div class="media-item">
-                    <!-- <div class="media-placeholder"> -->
-                    <img class="design" src="assets/design-before.png" alt="도입 전" />
-                    <!-- </div> -->
-                  </div>
-                  <div class="media-item">
-                    <!-- <div class="media-placeholder"> -->
-                    <img src="assets/design-after.png" alt="도입 후" />
-                    <!-- </div> -->
-                  </div>
-                </div>
-                <p class="media-caption">Google Studio 도입 전/후 비교</p>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">배운 점</div>
-                <div class="learn-box">
-                  디자인 작업 과정에서 기존 방식의 한계를 느끼고 새로운 도구를 도입하면서, 문제 해결에는 기술뿐 아니라 적절한 도구 선택도 중요한 요소라는 것을 경험했습니다.
-                  또한 팀원들을 설득해 방향을 전환하는 과정 역시 개발자의 역할이라는 것을 배웠습니다.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 5: 상태관리 구조 개선 -->
-        <div class="tab-panel">
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <h3>상태 생명주기를 고려한 구조 개선</h3>
-              <p>Zustand에서 Context API로 전환하여 페이지 단위 상태 격리</p>
-              <div class="header-badges">
-                <a
-                  class="pr-badge"
-                  href="https://github.com/boostcampwm2025/web25-ittda/wiki/%ED%94%84%EB%A1%9C%ED%95%84-%EC%88%98%EC%A0%95%EC%97%90%EC%84%9C%EC%9D%98-%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC-Context-API-vs-Zustand"
-                  target="_blank"
-                >
-                  📝 ADR
-                </a>
-              </div>
-            </div>
-            <div class="detail-sections">
-              <div class="detail-block">
-                <div class="detail-block-title">문제</div>
-                <ul>
-                  <li>Zustand 사용 시 페이지 이탈 후에도 데이터가 잔존</li>
-                  <li>전역 상태 오염으로 인한 예기치 않은 동작 가능성</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">개선</div>
-                <ul>
-                  <li>Context API 기반 페이지 단위 상태 관리 구조로 전환</li>
-                  <li>컴포넌트 마운트/언마운트 사이클에 맞춰 상태 생명주기 자동 관리</li>
-                </ul>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">결과</div>
-                <ul>
-                  <li>페이지 이탈 시 상태 자동 초기화 — 데이터 잔존 문제 해소</li>
-                  <li>상태 범위가 명확해져 유지보수 안정성 향상</li>
-                </ul>
-              </div>
-
-              <div class="media-block">
-                <div class="media-block-title">화면 / 시연</div>
-                <div class="media-grid col-1">
-                  <div class="media-item">
-                    <img src="assets/state-arch.png" alt="상태 구조 다이어그램" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="detail-block">
-                <div class="detail-block-title">배운 점</div>
-                <div class="learn-box">
-                  상태 관리를 설계하면서, 데이터가 어느 범위까지 유지되어야 하는지를 명확히 정의하는 것이 중요하다는 것을 배웠습니다.
-                  전역 상태와 로컬 상태의 경계를 구분함으로써 불필요한 의존성과 버그를 줄일 수 있었습니다.
-                </div>
-              </div>
-            </div>
-          </div>
       </div>
-    </section>
+    </div>
 
     <!-- Contact -->
     <section id="contact">
       <div class="container">
-        <h2 class="contact-title">함께 이야기 나눠요</h2>
-        <p class="contact-sub">새로운 기회나 협업에 열려 있습니다.</p>
-        <div class="contact-links">
+        <h2 class="contact-title reveal">함께 이야기 나눠요</h2>
+        <p class="contact-sub reveal">새로운 기회나 협업에 열려 있습니다.</p>
+        <div class="contact-links reveal">
           <a class="contact-link" href="mailto:wndqhr__@naver.com">✉️ wndqhr__@naver.com</a>
           <a class="contact-link" href="https://github.com/H-sooyeon" target="_blank">🐙 GitHub</a>
         </div>
@@ -2321,12 +2559,45 @@
     </div>
 
     <script>
-      function switchTab(index) {
-        const panels = document.querySelectorAll(".tab-panel");
-        const buttons = document.querySelectorAll(".tab-btn");
-        panels.forEach((p, i) => p.classList.toggle("active", i === index));
-        buttons.forEach((b, i) => b.classList.toggle("active", i === index));
+      // Detail modals
+      const detailModals = document.querySelectorAll(".detail-modal");
+      let lastFocusedTrigger = null;
+
+      function openModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        lastFocusedTrigger = document.activeElement;
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        requestAnimationFrame(() => modal.classList.add("show"));
+        const closeBtn = modal.querySelector(".detail-modal-close");
+        if (closeBtn) closeBtn.focus();
       }
+
+      function closeModal(modal) {
+        if (!modal || !modal.classList.contains("open")) return;
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        setTimeout(() => modal.classList.remove("open"), 250);
+        if (lastFocusedTrigger) lastFocusedTrigger.focus();
+      }
+
+      document.querySelectorAll(".detail-trigger").forEach((btn) => {
+        btn.addEventListener("click", () => openModal(btn.dataset.modalTarget));
+      });
+
+      document.querySelectorAll("[data-modal-close]").forEach((el) => {
+        el.addEventListener("click", () => closeModal(el.closest(".detail-modal")));
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        detailModals.forEach((modal) => {
+          if (modal.classList.contains("open")) closeModal(modal);
+        });
+      });
 
       // Lightbox
       const lightbox = document.getElementById("lightbox");
@@ -2361,6 +2632,24 @@
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeLightbox();
       });
+
+      // Scroll reveal
+      const revealEls = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window && revealEls.length) {
+        const revealObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("revealed");
+              observer.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+        );
+        revealEls.forEach((el) => revealObserver.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add("revealed"));
+      }
     </script>
   </body>
 </html>
