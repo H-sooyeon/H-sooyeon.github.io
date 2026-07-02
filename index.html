@@ -1922,11 +1922,10 @@
               <div class="detail-block">
                 <div class="detail-block-title">🙋 기여 역할</div>
                 <ul>
-                  <li>로그인, 사용자 정보 조회 / 로그아웃 / 회원 탈퇴 등 인증 관련 화면 구현</li>
+                  <li>로그인 / 로그아웃 인증 관련 화면 구현</li>
                   <li>다크모드 / 화이트모드 테마 전환 기능 구현</li>
                   <li>아고라(토론방) 생성 / 입장, 키워드 검색, 활성·종료 아고라 리스트 UI 구현</li>
-                  <li>실시간 채팅: 메시지 전송 / 반응, 참여자 목록, 채팅방 소셜 공유 기능 구현</li>
-                  <li>강퇴 투표, 비속어 필터링 등 익명 채팅 안전장치 기능 구현</li>
+                  <li>실시간 채팅: 메시지 전송, 참여자 목록, 채팅방 소셜 공유 기능 구현</li>
                   <li>토론 시작 / 종료 플로우 및 종료된 아고라 열람 기능 구현</li>
                 </ul>
               </div>
@@ -1934,19 +1933,149 @@
               <!-- 5. 문제점 & 해결 방법 -->
               <div class="detail-block">
                 <div class="detail-block-title">🛠 문제점 &amp; 해결 방법</div>
-                <div class="placeholder-note">정리 중입니다. 곧 추가될 예정입니다.</div>
-              </div>
+                <div class="problem-accordion">
+                  <details class="problem-item" open>
+                    <summary>
+                      <span class="problem-num">01</span>
+                      채팅방 새로고침 시 프로필 유실 및 재입장 불가
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            채팅방 내에서 새로고침 시 유저 프로필이 초기화되고 소켓 연결이 끊겨 재입장 처리가 되지 않음
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              채팅방/유저 정보를 세션 스토리지에 저장하고, 새로고침 감지 시 자동 재입장 API 호출
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/Attica-org/athens-client/pull/174"
+                                target="_blank"
+                              >
+                                PR #174
+                              </a>
+                            </span>
+                          </li>
+                          <li>중복 입장 방지 로직 추가 및 세션 초기화 중 대기 UI 표시</li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>새로고침 후 이전 채팅방에 자동 재입장되고 프로필이 유지됨</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </details>
 
-              <!-- 6. 아키텍처 -->
-              <div class="media-block">
-                <div class="media-block-title">아키텍처</div>
-                <div class="media-placeholder">
-                  <span class="icon">🏗</span>
-                  <span>아키텍처 다이어그램 추가 예정</span>
+                  <details class="problem-item">
+                    <summary>
+                      <span class="problem-num">02</span>
+                      다크모드 새로고침 시 라이트모드로 깜빡이는 현상 (FOUC)
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>
+                            다크모드 사용 중 새로고침하면 JS가 전역 상태를 초기화하기 전까지 라이트모드로 잠깐 깜빡이는
+                            FOUC(Flash of Unstyled Content) 현상 발생
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              테마 설정을 전역 상태 대신 쿠키로 관리하는 서버 액션 구현, Next.js 서버에서 쿠키를 읽어
+                              렌더링 이전에 테마 적용
+                              <a
+                                class="pr-badge"
+                                href="https://github.com/Attica-org/athens-client/pull/176"
+                                target="_blank"
+                              >
+                                PR #176
+                              </a>
+                            </span>
+                          </li>
+                          <li>
+                            아이콘 테마를 전역 상태 의존에서 CSS 기반으로 전환하여 JS 초기화 시점과 무관하게 올바른 테마
+                            적용
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>새로고침 시 다크모드 깜빡임 현상 제거</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </details>
+
+                  <details class="problem-item">
+                    <summary>
+                      <span class="problem-num">03</span>
+                      가상스크롤 적용 후 채팅 메시지 튕김 현상
+                    </summary>
+                    <div class="problem-item-body">
+                      <div class="detail-block">
+                        <div class="detail-block-title">문제</div>
+                        <ul>
+                          <li>메시지가 누적될수록 모든 항목을 DOM에 렌더링해 스크롤 성능이 저하됨</li>
+                          <li>
+                            성능 개선을 위해 @tanstack/react-virtual을 도입했으나, 라이브러리가 top-to-bottom 기준으로
+                            아이템 위치를 계산하는 구조여서 최신 메시지를 하단에 고정하려면 새 메시지 수신 시마다
+                            scrollTop을 최하단으로 강제 이동해야 했음
+                          </li>
+                          <li>
+                            이 과정에서 virtualizer가 위치를 재계산하는 타이밍과 scrollTop 이동이 충돌해, 스크롤
+                            중이거나 메시지를 전송할 때 화면이 위아래로 튕기는 현상 발생
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">해결</div>
+                        <ul>
+                          <li>
+                            <span>
+                              스크롤 컨테이너에 scaleY(-1) CSS를 적용해 리스트 전체를 상하 반전, scrollTop=0이 항상 최신
+                              메시지 위치가 되도록 구조 변경 (PR #141)
+                            </span>
+                          </li>
+                          <li>
+                            각 메시지 아이템에도 scaleY(-1) 을 적용해 텍스트가 거꾸로 보이는 현상 방지, 새 메시지 추가
+                            시 DOM 하단에 append되어 scrollTop이 변하지 않으므로 튕김 제거
+                          </li>
+                          <li>
+                            <span>
+                              단, 컨테이너가 반전된 상태에서는 마우스 휠 스크롤 방향도 반전되는 문제 발생 → wheel
+                              이벤트를 직접 가로채 scrollTop -= deltaY 로 방향을 보정
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="detail-block">
+                        <div class="detail-block-title">결과</div>
+                        <ul>
+                          <li>메시지 수와 무관하게 일정한 DOM 노드 수를 유지해 스크롤 성능 개선</li>
+                          <li>새 메시지 수신 및 전송 시 scrollTop 강제 이동이 없어져 화면 튕김 현상 제거</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </details>
                 </div>
               </div>
 
-              <!-- 7. 주요 기능 이미지 -->
+              <!-- 6. 주요 기능 이미지 -->
               <div class="media-block">
                 <div class="media-block-title">🖼 주요 기능 이미지</div>
                 <div class="media-grid col-5">
